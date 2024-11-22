@@ -3,6 +3,7 @@ import Header from "../Header";
 
 import UnstyledSelectIntroduction from "./Components/Selectors";
 import { MainSection } from "./homeStyled";
+import { CardBody } from "./Components/Card/card";
 type Props = {};
 
 function Home({}: Props) {
@@ -11,6 +12,7 @@ function Home({}: Props) {
       <Header />
       <MainSection>
         <UnstyledSelectIntroduction />
+        <CardBody>ksdcbhbc</CardBody>
       </MainSection>
     </>
   );

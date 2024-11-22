@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Auth_buttons,
   HeaderLink,
@@ -8,10 +8,19 @@ import {
 } from "./headerStyled";
 
 import { Button, Container, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 
 type Props = {};
 
 function Header({}: Props) {
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate("/sign-in");
+  };
+  const navigate2 = useNavigate();
+  const handleSignUpClick = () => {
+    navigate2("/sign-up");
+  };
   return (
     <Container maxWidth="xl">
       <HeaderWrapper>
@@ -30,18 +39,22 @@ function Header({}: Props) {
         <HeaderLinkWrapper>
           <HeaderLink>
             <li>
-              <a href="">Home</a>
+              <Link to={"/"}>Home</Link>
             </li>
             <li>
-              <a href="">About</a>
+              <Link to={"/admin"}>Admin</Link>
             </li>
             <li>
               <a href="">Contact</a>
             </li>
           </HeaderLink>
           <Auth_buttons>
-            <Button variant="contained">Sign In</Button>
-            <Button variant="contained">Sign Up</Button>
+            <Button variant="contained" onClick={handleButtonClick}>
+              Sign In
+            </Button>
+            <Button variant="contained" onClick={handleSignUpClick}>
+              Sign Up
+            </Button>
           </Auth_buttons>
         </HeaderLinkWrapper>
       </HeaderWrapper>
