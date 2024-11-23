@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { CreateAcc, InputBox, SignInWrapper } from "./SignIn";
 import {
   Button,
@@ -18,7 +18,30 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 type Props = {};
 
 function SignIn({}: Props) {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [value, setValue] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+
+    // Uzunlikni tekshirish
+    if (inputValue.length > 10) {
+      setError("Qiymat 10 ta belgidan oshmasligi kerak!");
+    } else {
+      setError(null); // Xato yo'q
+    }
+
+    setValue(inputValue); // Qiymatni yangilash
+  };
+
+  const handleSubmit = () => {
+    if (value.length === 0) {
+      setError("Maydon bo'sh bo'lishi mumkin emas!");
+    } else if (!error) {
+      alert("Form muvaffaqiyatli jo'natildi!");
+    }
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -33,6 +56,7 @@ function SignIn({}: Props) {
   ) => {
     event.preventDefault();
   };
+
   return (
     <Container
       maxWidth="xs"
@@ -53,6 +77,10 @@ function SignIn({}: Props) {
             id="outlined-basic"
             label="Email Address"
             variant="outlined"
+            value={value}
+            onChange={handleChange}
+            error={!!error}
+            helperText={error}
             sx={{
               width: "100%",
               background: "#FFFFFF",

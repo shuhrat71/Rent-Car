@@ -9,27 +9,26 @@ import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider, Navigation, Router } from "@toolpad/core";
 import { DashboardLayout } from "@toolpad/core";
 import { PageContainer } from "@toolpad/core";
+import GradingIcon from "@mui/icons-material/Grading";
 import Grid from "@mui/material/Grid2";
+import { OrderedList } from "./orders";
+import MultiActionAreaCard from "../Card";
 
 const NAVIGATION: Navigation = [
   {
     kind: "header",
     title: "Main items",
   },
+
   {
-    segment: "dashboard",
-    title: "Dashboard",
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: "add new car",
-    title: "Add New Car",
+    segment: "yangi mashina qo'shish",
+    title: "Yangi mashina qo'shish",
     icon: <AddCircleOutlineIcon />,
   },
   {
-    segment: "orders",
-    title: "Orders",
-    icon: <ShoppingCartIcon />,
+    segment: "ordered",
+    title: "Buyurtma qilinganlar",
+    icon: <GradingIcon />,
   },
   {
     kind: "divider",
@@ -97,12 +96,11 @@ const Skeleton = styled("div")<{ height: number }>(({ theme, height }) => ({
   content: '" "',
 }));
 
-export default function DashboardLayoutBasic(props: any) {
+export default function AdminPanel(props: any) {
   const { window } = props;
 
   const router = useDemoRouter("/dashboard");
 
-  // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
   return (
@@ -117,42 +115,10 @@ export default function DashboardLayoutBasic(props: any) {
           width: "100%",
         }}
       >
-        <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
-
-            <Grid size={12}>
-              <Skeleton height={150} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-          </Grid>
+        <PageContainer maxWidth="xl">
+          <OrderedList>
+            <MultiActionAreaCard />
+          </OrderedList>
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
