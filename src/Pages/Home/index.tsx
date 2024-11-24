@@ -6,6 +6,7 @@ import { MainSection } from "./homeStyled";
 import { CardBody } from "./Components/Card/card";
 import CardComm from "./Components/Card";
 import AdminPanel from "../Admin";
+import Filter from "./Components/Selectors";
 type Props = {};
 
 function Home({}: Props) {
@@ -13,10 +14,8 @@ function Home({}: Props) {
     <>
       <Header />
       <MainSection>
-        <UnstyledSelectIntroduction />
-        <CardBody>
-          <CardComm />
-        </CardBody>
+        <Filter />
+        <CardBody>{/* <CardComm /> */}</CardBody>
         {/* <AdminPanel /> */}
       </MainSection>
     </>
