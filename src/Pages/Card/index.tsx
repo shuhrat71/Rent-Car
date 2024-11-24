@@ -22,51 +22,6 @@ export default function MultiActionAreaCard() {
         display: "flex",
         flexWrap: "wrap",
       }}
-    >
-      <Card sx={{ maxWidth: 375 }}>
-        <CardActionArea>
-          <CardMedia component="img" height="190" image={laceti} alt={laceti} />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Chevrolet Gentra
-            </Typography>
-            <Typography
-              sx={{
-                color: "text.secondary",
-                display: "flex",
-                alignContent: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Typography>
-                <GroupIcon />: O'rindiqlar soni : 5
-              </Typography>
-              <Typography>
-                {" "}
-                <LocalGasStationIcon /> : Metan
-              </Typography>
-              <Typography>
-                <SecurityIcon />: Garov so'm : 3000000 Kuniga 300 km beriladi
-                unda ortiq har bir kilometr uchun : 1000
-              </Typography>
-              <Typography>
-                <DriveEtaIcon />
-                Benzin
-              </Typography>
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button size="small" color="primary">
-            Rent
-          </Button>
-        </CardActions>
-      </Card>
-    </Container>
+    ></Container>
   );
 }
