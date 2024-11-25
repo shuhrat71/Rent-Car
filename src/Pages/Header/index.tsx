@@ -6,10 +6,11 @@ import {
   HeaderWrapper,
   LogoBox,
 } from "./headerStyled";
-
+import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-
+import { LogoGif } from "./headerStyled";
+import car from "../img/car.gif";
 type Props = {};
 
 function Header({}: Props) {
@@ -25,6 +26,9 @@ function Header({}: Props) {
     <Container maxWidth="xl">
       <HeaderWrapper>
         <LogoBox>
+          <LogoGif>
+            <img src={rentCarLogo} alt="" />
+          </LogoGif>
           <Typography variant="h1" fontSize="26px">
             Jizzax
             <span
@@ -42,12 +46,13 @@ function Header({}: Props) {
               <Link to={"/"}>Home</Link>
             </li>
             <li>
-              <Link to={"/admin"}>Admin</Link>
+              <Link to={"/about"}>About</Link>
             </li>
             <li>
               <a href="">Contact</a>
             </li>
           </HeaderLink>
+
           <Auth_buttons>
             <Button variant="contained" onClick={handleButtonClick}>
               Sign In

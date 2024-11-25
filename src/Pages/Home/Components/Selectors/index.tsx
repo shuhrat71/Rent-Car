@@ -9,10 +9,12 @@ import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import laceti from "./img/laceti.jpg";
+import GradientIcon from "@mui/icons-material/Gradient";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import { Container } from "@mui/material";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import CardComm from "../Card";
+import { Selectors__wrapper } from "./select";
 interface Product {
   id: number;
   carName: string;
@@ -30,23 +32,23 @@ const database: Product[] = [
     url: "https://rostov.masmotors.ru/colors/ravon-gentra/14.png",
     carName: "Gentra",
     price: "3000000",
-    color: "black",
+    color: "Qora",
     petrol: "Gaz",
   },
   {
     id: 2,
     category: "Mexanik",
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxz2PB8k3TitoNqWoXoFZh5gizeV7MCnwdOA&s",
-    carName: "Cobalt",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/12.png",
+    carName: "Cobalt 1.5 ",
     price: "3000000",
-    color: "white",
+    color: "Oq",
     petrol: "Benzin",
   },
   {
     id: 3,
     category: "Avtomat",
     url: "https://secure-developments.com/shared/chile/gm_forms/assets/front/images/jellys/65f46f72e48fd.png",
-    carName: "Onix",
+    carName: "Onix (1.2 Turbo)",
     price: "3000000",
     color: "Kumushrang",
     petrol: "Gaz",
@@ -55,7 +57,7 @@ const database: Product[] = [
     id: 4,
     category: "Avtomat",
     url: "https://ruautoshop.com/auto/images/000001213975ddb2d345.png",
-    carName: "CHEVROLET NEXIA 3 YANGI 2022",
+    carName: "Nexia-3 1.5 ",
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
@@ -63,19 +65,118 @@ const database: Product[] = [
   {
     id: 5,
     category: "Avtomat",
-    url: "https://ruautoshop.com/auto/images/000001213975ddb2d345.png",
-    carName: "CHEVROLET NEXIA 3 YANGI 2022",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/13.png",
+    carName: "Nexia-3 1.5 ",
     price: "3000000",
-    color: "Kulrang",
+    color: "Oq",
     petrol: "Gaz",
   },
   {
     id: 6,
     category: "Avtomat",
-    url: "https://ruautoshop.com/auto/images/000001213975ddb2d345.png",
-    carName: "CHEVROLET NEXIA 3 YANGI 2022",
+    url: "https://storage.yandexcloud.net/cdn.carso.ru/uploads/new_car/309/colors/12.png",
+    carName: "Nexia-3 1.5 ",
+    price: "3000000",
+    color: "Qora",
+    petrol: "Gaz",
+  },
+  {
+    id: 7,
+    category: "Mexanik",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/11.png",
+    carName: "Gentra 1.5 AT",
+    price: "3000000",
+    color: "Oq",
+    petrol: "Benzin",
+  },
+  {
+    id: 8,
+    category: "Mexanik",
+    url: "https://spb.autoglass-russia.ru/img/auto/chevrolet-lacetti.png",
+    carName: "Laseti",
+    price: "3000000",
+    color: "Qora",
+    petrol: "Gaz",
+  },
+  {
+    id: 9,
+    category: "Mexanik",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/14.png",
+    carName: "Spark 1.25",
+    price: "3000000",
+    color: "Oq",
+    petrol: "Gaz",
+  },
+  {
+    id: 10,
+    category: "Mexanik",
+    url: "https://storage.yandexcloud.net/cdn.carso.ru/uploads/new_car/176/colors/largecard_chevrolet_spark_2.png",
+    carName: "Spark",
+    price: "3000000",
+    color: "Qora",
+    petrol: "Gaz",
+  },
+  {
+    id: 11,
+    category: "Mexanik",
+    url: "https://134706.selcdn.ru/v1/SEL_39171/site-production-public/system/image/file/9312394/vehicle_slider_1%402x.jpg",
+    carName: "Nexia 2",
+    price: "3000000",
+    color: "Oq",
+    petrol: "Gaz",
+  },
+  {
+    id: 12,
+    category: "Mexanik",
+    url: "https://m-at.ru/upload/iblock/535/8yagk0setg4yn3ws9w3z28qgc18tups2/nexia_kletn_2_daewoo_sedan.jpg",
+    carName: "Nexia 2",
     price: "3000000",
     color: "Kulrang",
+    petrol: "Gaz",
+  },
+  {
+    id: 13,
+    category: "Avtomat",
+    url: "https://asacar.uz/uploads/car_color/KK/KK/KE/1632743563.png",
+    carName: "Malibu 2",
+    price: "6000000",
+    color: "Qora",
+    petrol: "Benzin",
+  },
+  {
+    id: 14,
+    category: "Avtomat",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/5.png",
+    carName: "Malibu 2",
+    price: "6000000",
+    color: "Oq",
+    petrol: "Benzin",
+  },
+  {
+    id: 15,
+    category: "Avtomat",
+    url: "https://storage.yandexcloud.net/cdn.carso.ru/uploads/new_car/169/colors/image_507.png",
+    carName: "Captiva 4 2.4 ",
+    price: "6000000",
+    color: "Oq",
+    petrol: "Benzin",
+  },
+  {
+    id: 16,
+    category: "Avtomat",
+    url: "https://www.budgetavto.uz/media/sitecars/Captiva_3.png",
+    carName: "Captiva 4 2.4 ",
+    price: "6000000",
+    color: "Qora",
+    petrol: "Benzin",
+  },
+  {
+    id: 17,
+    category: "Avtomat",
+    url: "https://avtouzbegim.uz/wp-content/uploads/2024/01/6.png",
+    carName: "Onix",
+    price: "3000000",
+    color: "Kumushrang",
     petrol: "Gaz",
   },
 ];
@@ -85,7 +186,6 @@ const Filter: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedPrice, setSelectedPrice] = useState<string>("all");
   const [selectedColor, setSelectedColor] = useState<string>("all");
-  const [selectedImg, setSelectedImg] = useState<string>("all");
   const [selectedPetrol, setSelectedPetrol] = useState<string>("all");
 
   // Unikal qiymatlarni olish uchun yordamchi funksiyalar
@@ -114,20 +214,11 @@ const Filter: React.FC = () => {
   );
   const petrol = useMemo(
     () => [
-      "Narx",
+      "Yoqilg'i turi",
       ...Array.from(new Set(database.map((product) => product.petrol))),
     ],
     []
   );
-  const url = useMemo(
-    () => [
-      "Narx",
-      ...Array.from(new Set(database.map((product) => product.url))),
-    ],
-    []
-  );
-
-  // Filtrlash funksiyasi
   const filteredData = useMemo(() => {
     return database.filter((product) => {
       const matchesSearch = product.carName
@@ -141,44 +232,25 @@ const Filter: React.FC = () => {
         selectedPrice === "" || product.price === selectedPrice;
       const matchesPetrol =
         selectedPetrol === "" || product.petrol === selectedPetrol;
-      const matchesImg = selectedImg === "" || product.url === selectedImg;
       return (
         matchesSearch &&
         matchesCategory &&
         matchesColor &&
         matchesPrice &&
-        matchesPetrol &&
-        matchesImg
+        matchesPetrol
       );
     });
-  }, [search, selectedCategory, selectedColor, selectedImg, selectedPetrol]);
+  }, [search, selectedCategory, selectedColor, selectedPetrol, selectedPetrol]);
 
   return (
     <Container maxWidth="xl">
       <h1>Mahsulot Filtri</h1>
-
-      {/* Qidiruv */}
-
-      {/* Dropdownlar */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          gap: "10px",
-          marginBottom: "20px",
-        }}
-      >
+      <Selectors__wrapper>
         <input
           type="text"
           placeholder="Qidiruv..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            width: "200px",
-            marginBottom: "20px",
-          }}
         />
         <select
           onChange={(e) => setSelectedCategory(e.target.value)}
@@ -190,16 +262,7 @@ const Filter: React.FC = () => {
             </option>
           ))}
         </select>
-        <select
-          onChange={(e) => setSelectedImg(e.target.value)}
-          value={selectedImg}
-        >
-          {url.map((url) => (
-            <option key={url} value={url}>
-              {url}
-            </option>
-          ))}
-        </select>
+
         <select
           onChange={(e) => setSelectedColor(e.target.value)}
           value={selectedColor}
@@ -221,7 +284,17 @@ const Filter: React.FC = () => {
             </option>
           ))}
         </select>
-      </div>
+        <select
+          onChange={(e) => setSelectedPetrol(e.target.value)}
+          value={selectedPetrol}
+        >
+          {petrol.map((petrol) => (
+            <option key={petrol} value={petrol}>
+              {petrol}
+            </option>
+          ))}
+        </select>
+      </Selectors__wrapper>
 
       <div>
         {filteredData.length > 0 ? (
@@ -231,7 +304,7 @@ const Filter: React.FC = () => {
                 <CardMedia
                   component="img"
                   height="190"
-                  image={laceti}
+                  image={product.url}
                   alt={laceti}
                 />
                 <CardContent>
@@ -249,14 +322,16 @@ const Filter: React.FC = () => {
                     <Typography>
                       <GroupIcon />: O'rindiqlar soni : 5
                     </Typography>
-                    <Typography>{product.color}</Typography>
+                    <Typography>
+                      <GradientIcon /> {product.color}
+                    </Typography>
                     <Typography>
                       <SecurityIcon />: Garov so'm : {product.price} Kuniga 300
                       km beriladi unda ortiq har bir kilometr uchun : 1000
                     </Typography>
                     <Typography>
                       <DriveEtaIcon />
-                      Benzin
+                      {product.petrol}
                     </Typography>
                   </Typography>
                 </CardContent>
@@ -274,7 +349,7 @@ const Filter: React.FC = () => {
             </Card>
           ))
         ) : (
-          <Typography>Hechnarsa topilmadi</Typography>
+          <CardComm />
         )}
       </div>
     </Container>
