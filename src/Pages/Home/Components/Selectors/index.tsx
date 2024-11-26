@@ -137,7 +137,7 @@ const database: Product[] = [
   {
     id: 13,
     category: "Avtomat",
-    url: "https://asacar.uz/uploads/car_color/KK/KK/KE/1632743563.png",
+    url: "https://e7.pngegg.com/pngimages/624/67/png-clipart-2017-chevrolet-malibu-car-2016-chevrolet-malibu-general-motors-chevrolet-compact-car-sedan-thumbnail.png",
     carName: "Malibu 2",
     price: "6000000",
     color: "Qora",
@@ -177,6 +177,15 @@ const database: Product[] = [
     carName: "Onix",
     price: "3000000",
     color: "Kumushrang",
+    petrol: "Gaz",
+  },
+  {
+    id: 19,
+    category: "Mexanik",
+    url: "https://lionmotors.uz/wp-content/uploads/2020/11/damaswhite.jpg",
+    carName: "Damas",
+    price: "3000000",
+    color: "Oq",
     petrol: "Gaz",
   },
 ];
