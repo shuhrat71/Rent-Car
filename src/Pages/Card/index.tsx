@@ -16,6 +16,7 @@ import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import { Container } from "@mui/material";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import chevrolet from "./img/chevrolet.svg";
+import { RentBtn } from "./card";
 
 interface Product {
   id: number;
@@ -53,6 +54,15 @@ const database: Product[] = [
     carName: "Onix (1.2 Turbo)",
     price: "3000000",
     color: "Kumushrang",
+    petrol: "Gaz",
+  },
+  {
+    id: 17,
+    category: "Avtomat",
+    url: "https://automotive-api.s3.us-east-2.amazonaws.com/5f8b12166d5cc500171c6718/e561c15d-5668-4167-89cd-1d3461a78a4b/onix.png",
+    carName: "Onix",
+    price: "3000000",
+    color: "Kulrang",
     petrol: "Gaz",
   },
   {
@@ -139,7 +149,7 @@ const database: Product[] = [
   {
     id: 13,
     category: "Avtomat",
-    url: "https://e7.pngegg.com/pngimages/624/67/png-clipart-2017-chevrolet-malibu-car-2016-chevrolet-malibu-general-motors-chevrolet-compact-car-sedan-thumbnail.png",
+    url: "https://asacar.uz/uploads/car_color/KK/KK/KE/1632743563.png",
     carName: "Malibu 2",
     price: "6000000",
     color: "Qora",
@@ -172,15 +182,7 @@ const database: Product[] = [
     color: "Qora",
     petrol: "Benzin",
   },
-  {
-    id: 17,
-    category: "Avtomat",
-    url: "https://avtouzbegim.uz/wp-content/uploads/2024/01/6.png",
-    carName: "Onix",
-    price: "3000000",
-    color: "Kumushrang",
-    petrol: "Gaz",
-  },
+
   {
     id: 19,
     category: "Mexanik",
@@ -242,16 +244,13 @@ export default function MultiActionAreaCard() {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-              <CardActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Button size="small" color="primary">
-                  Rent
-                </Button>
-              </CardActions>
+              <RentBtn>
+                <CardActions>
+                  <Button size="small" color="primary">
+                    Ijaraga Olish
+                  </Button>
+                </CardActions>
+              </RentBtn>
             </Card>
           ))
         ) : (

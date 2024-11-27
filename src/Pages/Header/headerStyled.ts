@@ -6,7 +6,7 @@ export const HeaderWrapper = styled.header`
   border-radius: 0 0 8px 8px;
   display: flex;
   align-items: center;
-  background-color: aliceblue;
+  background-color: #ffeb3b;
 `;
 export const LogoBox = styled.div`
   display: flex;
@@ -26,6 +26,12 @@ export const HeaderLink = styled.ul`
   li a {
     text-decoration: none;
     color: black;
+    transition: 0.3s;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  li a:hover {
+    color: #f44336;
   }
 `;
 export const Auth_buttons = styled.div`
@@ -37,6 +43,11 @@ export const Auth_buttons = styled.div`
     padding: 10px 15px;
     border-radius: 15px;
     background-color: #000;
+  }
+  button:hover {
+    border: 0 solid black;
+    background-color: #ffeb3b;
+    color: #000;
   }
 `;
 export const LogoGif = styled.div`

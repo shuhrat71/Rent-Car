@@ -14,7 +14,7 @@ import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import { Container } from "@mui/material";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import CardComm from "../Card";
-import { Selectors__wrapper } from "./select";
+import { Input_wrapper, Selectors__wrapper } from "./select";
 interface Product {
   id: number;
   carName: string;
@@ -255,12 +255,14 @@ const Filter: React.FC = () => {
     <Container maxWidth="xl">
       <h1>Mahsulot Filtri</h1>
       <Selectors__wrapper>
-        <input
-          type="text"
-          placeholder="Qidiruv..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <Input_wrapper>
+          <input
+            type="text"
+            placeholder="Qidiruv..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Input_wrapper>
         <select
           onChange={(e) => setSelectedCategory(e.target.value)}
           value={selectedCategory}
