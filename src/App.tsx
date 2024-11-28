@@ -1,12 +1,11 @@
-import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import { IRoute, PRIVATE_ROUTES, PUBLIC_ROUTES } from "./routes";
+
+import "./App.css";
 import NotFound from "./Pages/NotFound";
-import SignIn from "./Pages/SignIn";
-import SignUp from "./Pages/SignUp";
+import { IRoute, PRIVATE_ROUTES, PUBLIC_ROUTES } from "./routes";
 
 function App() {
-  const token = "xcdc";
+  const token = "qwq";
 
   if (token) {
     return (
@@ -14,7 +13,7 @@ function App() {
         {PRIVATE_ROUTES.map(({ component, path }: IRoute) => (
           <Route element={component} path={path} />
         ))}
-        <Route path="/sing-in" element={<SignIn />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     );
   }
@@ -24,7 +23,7 @@ function App() {
       {PUBLIC_ROUTES.map(({ component, path }: IRoute) => (
         <Route element={component} path={path} />
       ))}
-      <Route path="*" element={<SignUp />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

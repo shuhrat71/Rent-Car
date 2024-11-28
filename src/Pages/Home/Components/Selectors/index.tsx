@@ -1,20 +1,27 @@
-import React, { useState, useMemo } from "react";
+import {
+  Select,
+  MenuItem,
+  Container,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent,
+} from "@mui/material";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
+import React, { useState, useMemo } from "react";
 import Typography from "@mui/material/Typography";
 import GroupIcon from "@mui/icons-material/Group";
-import SecurityIcon from "@mui/icons-material/Security";
-import Button from "@mui/material/Button";
-import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import laceti from "./img/laceti.jpg";
+import SecurityIcon from "@mui/icons-material/Security";
 import GradientIcon from "@mui/icons-material/Gradient";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import { Container } from "@mui/material";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
-import CardComm from "../Card";
+import CardActionArea from "@mui/material/CardActionArea";
+
+import laceti from "./img/laceti.jpg";
 import { Input_wrapper, Selectors__wrapper } from "./select";
+
 interface Product {
   id: number;
   carName: string;
@@ -192,64 +199,46 @@ const database: Product[] = [
 
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedPrice, setSelectedPrice] = useState<string>("all");
-  const [selectedColor, setSelectedColor] = useState<string>("all");
-  const [selectedPetrol, setSelectedPetrol] = useState<string>("all");
+  const [productData, setProductData] = useState(database);
+  const [selectedPrice, setSelectedPrice] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedPetrol, setSelectedPetrol] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  // Unikal qiymatlarni olish uchun yordamchi funksiyalar
   const categories = useMemo(
-    () => [
-      "Uzatma turi",
-      ...Array.from(new Set(database.map((product) => product.category))),
-    ],
+    () => [...Array.from(new Set(database.map((product) => product.category)))],
     []
   );
 
   const colors = useMemo(
-    () => [
-      "Rang",
-      ...Array.from(new Set(database.map((product) => product.color))),
-    ],
+    () => [...Array.from(new Set(database.map((product) => product.color)))],
     []
   );
 
   const price = useMemo(
-    () => [
-      "Narx",
-      ...Array.from(new Set(database.map((product) => product.price))),
-    ],
+    () => [...Array.from(new Set(database.map((product) => product.price)))],
     []
   );
   const petrol = useMemo(
-    () => [
-      "Yoqilg'i turi",
-      ...Array.from(new Set(database.map((product) => product.petrol))),
-    ],
+    () => [...Array.from(new Set(database.map((product) => product.petrol)))],
     []
   );
-  const filteredData = useMemo(() => {
-    return database.filter((product) => {
-      const matchesSearch = product.carName
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesCategory =
-        selectedCategory === "" || product.category === selectedCategory;
-      const matchesColor =
-        selectedColor === "" || product.color === selectedColor;
-      const matchesPrice =
-        selectedPrice === "" || product.price === selectedPrice;
-      const matchesPetrol =
-        selectedPetrol === "" || product.petrol === selectedPetrol;
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesColor &&
-        matchesPrice &&
-        matchesPetrol
-      );
-    });
-  }, [search, selectedCategory, selectedColor, selectedPetrol, selectedPetrol]);
+
+  const handleSearch = (
+    value: string,
+    type: "carName" | "category" | "color" | "price" | "petrol"
+  ) => {
+    console.log(value);
+    if (value) {
+      const searchResult = database.filter((data) => {
+        console.log("data type:", data[type]);
+        return data[type]?.toLowerCase().includes(value.toLowerCase());
+      });
+      setProductData(searchResult);
+    } else {
+      setProductData(database);
+    }
+  };
 
   return (
     <Container maxWidth="xl">
@@ -258,58 +247,100 @@ const Filter: React.FC = () => {
         <Input_wrapper>
           <input
             type="text"
-            placeholder="Qidiruv..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Qidiruv..."
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const value = event.target.value;
+              handleSearch(value, "carName");
+              setSearch(value);
+            }}
           />
         </Input_wrapper>
-        <select
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          value={selectedCategory}
-        >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
 
-        <select
-          onChange={(e) => setSelectedColor(e.target.value)}
-          value={selectedColor}
-        >
-          {colors.map((color) => (
-            <option key={color} value={color}>
-              {color}
-            </option>
-          ))}
-        </select>
+        <FormControl fullWidth>
+          <InputLabel id="select-category">Uzatma turi</InputLabel>
+          <Select
+            label="Uzatma turi"
+            value={selectedCategory}
+            labelId="select-category"
+            onChange={(event: SelectChangeEvent) => {
+              const value = event.target.value;
+              handleSearch(value, "category");
+              setSelectedCategory(value);
+            }}
+          >
+            {categories.map((category) => (
+              <MenuItem value={category} key={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <select
-          onChange={(e) => setSelectedPrice(e.target.value)}
-          value={selectedPrice}
-        >
-          {price.map((price) => (
-            <option key={price} value={price}>
-              {price}
-            </option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => setSelectedPetrol(e.target.value)}
-          value={selectedPetrol}
-        >
-          {petrol.map((petrol) => (
-            <option key={petrol} value={petrol}>
-              {petrol}
-            </option>
-          ))}
-        </select>
+        <FormControl fullWidth>
+          <InputLabel id="select-color">Color</InputLabel>
+          <Select
+            label="Color"
+            value={selectedColor}
+            labelId="select-color"
+            onChange={(event: SelectChangeEvent) => {
+              const value = event.target.value;
+              handleSearch(event.target.value, "color");
+              setSelectedColor(value);
+            }}
+          >
+            {colors.map((color) => (
+              <MenuItem value={color} key={color}>
+                {color}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel id="select-price">Price</InputLabel>
+          <Select
+            label="Price"
+            value={selectedPrice}
+            labelId="select-price"
+            onChange={(event: SelectChangeEvent) => {
+              const value = event.target.value;
+              handleSearch(event.target.value, "price");
+              setSelectedPrice(value);
+            }}
+          >
+            {price.map((value) => (
+              <MenuItem value={value} key={value}>
+                {value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel id="select-petrol">Petrol</InputLabel>
+          <Select
+            label="Petrol"
+            value={selectedPetrol}
+            labelId="select-petrol"
+            onChange={(event: SelectChangeEvent) => {
+              const value = event.target.value;
+              handleSearch(event.target.value, "petrol");
+              setSelectedPetrol(value);
+            }}
+          >
+            {petrol.map((value) => (
+              <MenuItem value={value} key={value}>
+                {value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Selectors__wrapper>
 
       <div>
-        {filteredData.length > 0 ? (
-          filteredData.map((product) => (
+        {productData.length > 0 ? (
+          productData.map((product) => (
             <Card sx={{ maxWidth: 375 }} key={product.id}>
               <CardActionArea>
                 <CardMedia
@@ -360,7 +391,7 @@ const Filter: React.FC = () => {
             </Card>
           ))
         ) : (
-          <CardComm />
+          <Typography>No Data</Typography>
         )}
       </div>
     </Container>

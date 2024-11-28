@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import AdminPanel from "./Pages/Admin";
 import App from "./App";
+import Rented from "./Pages/Rented/inxdex";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,6 +15,7 @@ root.render(
     <BrowserRouter>
       <App />
       {/* <AdminPanel /> */}
+      {/* <Rented /> */}
     </BrowserRouter>
   </React.StrictMode>
 );

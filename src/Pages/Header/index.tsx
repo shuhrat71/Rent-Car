@@ -10,7 +10,6 @@ import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoGif } from "./headerStyled";
-import car from "../img/car.gif";
 type Props = {};
 
 function Header({}: Props) {
@@ -30,10 +29,12 @@ function Header({}: Props) {
             <img src={rentCarLogo} alt="" />
           </LogoGif>
           <Typography variant="h1" fontSize="26px">
-            Jizzax
+            Rent
             <span
               style={{
                 color: "red",
+                fontWeight: "bold",
+                fontFamily: '"Play", sans-serif',
               }}
             >
               Car
