@@ -2,10 +2,13 @@ import styled from "@emotion/styled";
 
 export const Selectors__wrapper = styled.div`
   width: 100%;
+  padding: 10px 20px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   margin-bottom: 30px;
   justify-content: space-between;
+  background-color: #ffeb3b;
   gap: 20px;
   input {
     width: 200px;
@@ -33,4 +36,7 @@ export const Input_wrapper = styled.div`
     outline-color: #ffeb3b;
     border: 0;
   }
+`;
+export const SelectBox = styled.div`
+  width: 170px;
 `;

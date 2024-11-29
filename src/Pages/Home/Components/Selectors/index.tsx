@@ -21,6 +21,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 
 import laceti from "./img/laceti.jpg";
 import { Input_wrapper, Selectors__wrapper } from "./select";
+import { RentBtn } from "../Card/card";
 
 interface Product {
   id: number;
@@ -242,7 +243,14 @@ const Filter: React.FC = () => {
 
   return (
     <Container maxWidth="xl">
-      <h1>Mahsulot Filtri</h1>
+      <h1
+        style={{
+          fontSize: "35px",
+          color: "white",
+        }}
+      >
+        Mahsulot Filtri
+      </h1>
       <Selectors__wrapper>
         <Input_wrapper>
           <input
@@ -258,7 +266,14 @@ const Filter: React.FC = () => {
         </Input_wrapper>
 
         <FormControl fullWidth>
-          <InputLabel id="select-category">Uzatma turi</InputLabel>
+          <InputLabel
+            id="select-category"
+            sx={{
+              color: "black",
+            }}
+          >
+            Uzatma turi
+          </InputLabel>
           <Select
             label="Uzatma turi"
             value={selectedCategory}
@@ -338,7 +353,14 @@ const Filter: React.FC = () => {
         </FormControl>
       </Selectors__wrapper>
 
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          rowGap: "20px",
+        }}
+      >
         {productData.length > 0 ? (
           productData.map((product) => (
             <Card sx={{ maxWidth: 375 }} key={product.id}>
@@ -378,16 +400,18 @@ const Filter: React.FC = () => {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-              <CardActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Button size="small" color="primary">
-                  Rent
-                </Button>
-              </CardActions>
+              <RentBtn>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button size="small" color="primary">
+                    Rent
+                  </Button>
+                </CardActions>
+              </RentBtn>
             </Card>
           ))
         ) : (

@@ -1,7 +1,5 @@
 import * as React from "react";
 import { extendTheme, styled } from "@mui/material/styles";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -10,9 +8,8 @@ import { AppProvider, Navigation, Router } from "@toolpad/core";
 import { DashboardLayout } from "@toolpad/core";
 import { PageContainer } from "@toolpad/core";
 import GradingIcon from "@mui/icons-material/Grading";
-import Grid from "@mui/material/Grid2";
 import { OrderedList } from "./orders";
-import MultiActionAreaCard from "../Card";
+import MultiActionAreaCard from "../Home/Components/Card";
 
 const NAVIGATION: Navigation = [
   {

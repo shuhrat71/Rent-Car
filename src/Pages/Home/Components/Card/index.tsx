@@ -1,12 +1,9 @@
-import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import GroupIcon from "@mui/icons-material/Group";
-import DoneAllIcon from "@mui/icons-material/DoneAll";
 import GradientIcon from "@mui/icons-material/Gradient";
-import GradingIcon from "@mui/icons-material/Grading";
 import SecurityIcon from "@mui/icons-material/Security";
 import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -14,9 +11,7 @@ import CardActions from "@mui/material/CardActions";
 import laceti from "./img/laceti.jpg";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import { Container } from "@mui/material";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
-import chevrolet from "./img/chevrolet.svg";
-import { RentBtn } from "./card";
+import { RentBtn } from "../Card/card";
 
 interface Product {
   id: number;
@@ -199,10 +194,9 @@ export default function MultiActionAreaCard() {
     <Container maxWidth="xl">
       <div
         style={{
+          width: "100%",
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "space-between",
-          rowGap: "20px",
         }}
       >
         {database.length > 0 ? (
