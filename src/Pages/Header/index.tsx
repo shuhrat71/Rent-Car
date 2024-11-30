@@ -10,6 +10,7 @@ import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoGif } from "./headerStyled";
+import BackgroundVideo from "../../assets";
 type Props = {};
 
 function Header({}: Props) {

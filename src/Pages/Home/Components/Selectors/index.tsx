@@ -21,7 +21,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 
 import laceti from "./img/laceti.jpg";
 import { Input_wrapper, Selectors__wrapper } from "./select";
-import { RentBtn } from "../Card/card";
+import { NoData, RentBtn } from "../Card/card";
 
 interface Product {
   id: number;
@@ -415,7 +415,7 @@ const Filter: React.FC = () => {
             </Card>
           ))
         ) : (
-          <Typography>No Data</Typography>
+          <NoData></NoData>
         )}
       </div>
     </Container>

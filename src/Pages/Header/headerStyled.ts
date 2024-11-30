@@ -7,8 +7,7 @@ export const HeaderWrapper = styled.header`
   display: flex;
   align-items: center;
   background-color: #ffeb3b;
-  position: sticky;
-  top: 10px;
+  top: 0;
 `;
 export const LogoBox = styled.div`
   display: flex;
