@@ -9,19 +9,17 @@ import {
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
+import CardActionArea from "@mui/material/CardActionArea";
 import React, { useState, useMemo } from "react";
-import Typography from "@mui/material/Typography";
-import GroupIcon from "@mui/icons-material/Group";
+import { Typography, Box } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import SecurityIcon from "@mui/icons-material/Security";
-import GradientIcon from "@mui/icons-material/Gradient";
-import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import CardActionArea from "@mui/material/CardActionArea";
-
-import laceti from "./img/laceti.jpg";
-import { Input_wrapper, Selectors__wrapper } from "./select";
-import { NoData, RentBtn } from "../Card/card";
+import { CarName, Input_wrapper, Selectors__wrapper } from "./select";
+import { CarDetail, RentBtn } from "../Card/card";
+import speedometr from "./img/speedometer.svg";
+import gearbox from "./img/gearbox.svg";
+import user from "./img/user.svg";
+import gasStation from "./img/gasStation.svg";
 
 interface Product {
   id: number;
@@ -31,6 +29,8 @@ interface Product {
   petrol: string;
   category: string;
   url: string;
+  speedometr: string;
+  place: number;
 }
 
 const database: Product[] = [
@@ -42,6 +42,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 2,
@@ -51,6 +53,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 3,
@@ -60,6 +64,19 @@ const database: Product[] = [
     price: "3000000",
     color: "Kumushrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
+  },
+  {
+    id: 17,
+    category: "Avtomat",
+    url: "https://automotive-api.s3.us-east-2.amazonaws.com/5f8b12166d5cc500171c6718/e561c15d-5668-4167-89cd-1d3461a78a4b/onix.png",
+    carName: "Onix",
+    price: "3000000",
+    color: "Kulrang",
+    petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 4,
@@ -69,6 +86,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 5,
@@ -78,6 +97,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 6,
@@ -87,15 +108,19 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 7,
     category: "Mexanik",
     url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/11.png",
-    carName: "Gentra 1.5 AT",
+    carName: "Gentra",
     price: "3000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 8,
@@ -105,15 +130,19 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 9,
     category: "Mexanik",
     url: "https://avtouzbegim.uz/wp-content/uploads/2023/05/14.png",
-    carName: "Spark 1.25",
+    carName: "Spark ",
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 10,
@@ -123,6 +152,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 11,
@@ -132,6 +163,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 12,
@@ -141,15 +174,19 @@ const database: Product[] = [
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 13,
     category: "Avtomat",
-    url: "https://e7.pngegg.com/pngimages/624/67/png-clipart-2017-chevrolet-malibu-car-2016-chevrolet-malibu-general-motors-chevrolet-compact-car-sedan-thumbnail.png",
+    url: "https://asacar.uz/uploads/car_color/KK/KK/KE/1632743563.png",
     carName: "Malibu 2",
     price: "6000000",
     color: "Qora",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 14,
@@ -159,34 +196,32 @@ const database: Product[] = [
     price: "6000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 15,
     category: "Avtomat",
     url: "https://storage.yandexcloud.net/cdn.carso.ru/uploads/new_car/169/colors/image_507.png",
-    carName: "Captiva 4 2.4 ",
+    carName: "Captiva 4 ",
     price: "6000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 6,
   },
   {
     id: 16,
     category: "Avtomat",
     url: "https://www.budgetavto.uz/media/sitecars/Captiva_3.png",
-    carName: "Captiva 4 2.4 ",
+    carName: "Captiva 4",
     price: "6000000",
     color: "Qora",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 6,
   },
-  {
-    id: 17,
-    category: "Avtomat",
-    url: "https://avtouzbegim.uz/wp-content/uploads/2024/01/6.png",
-    carName: "Onix",
-    price: "3000000",
-    color: "Kumushrang",
-    petrol: "Gaz",
-  },
+
   {
     id: 19,
     category: "Mexanik",
@@ -195,6 +230,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 8,
   },
 ];
 
@@ -357,65 +394,67 @@ const Filter: React.FC = () => {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "space-between",
-          rowGap: "20px",
+          justifyContent: "center",
+          gap: "20px",
         }}
       >
         {productData.length > 0 ? (
           productData.map((product) => (
-            <Card sx={{ maxWidth: 375 }} key={product.id}>
+            <Card sx={{ maxWidth: 400 }} key={product.id}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="190"
                   image={product.url}
-                  alt={laceti}
+                  alt={product.url}
                 />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {product.carName}
-                  </Typography>
-                  <Typography
+                  <CarName>
+                    <Typography variant="h1">{product.carName}</Typography>
+                  </CarName>
+                  <Box
                     sx={{
-                      color: "text.secondary",
+                      width: "375px",
+                      height: "100px",
                       display: "flex",
-                      alignContent: "center",
-                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      background: "#F6F6F6",
+                      borderRadius: "16px",
                     }}
                   >
-                    <Typography>
-                      <GroupIcon />: O'rindiqlar soni : 5
-                    </Typography>
-                    <Typography>
-                      <GradientIcon /> {product.color}
-                    </Typography>
-                    <Typography>
-                      <SecurityIcon />: Garov so'm : {product.price} Kuniga 300
-                      km beriladi unda ortiq har bir kilometr uchun : 1000
-                    </Typography>
-                    <Typography>
-                      <DriveEtaIcon />
-                      {product.petrol}
-                    </Typography>
-                  </Typography>
+                    <CarDetail>
+                      <div className="speedometr box">
+                        <img src={speedometr} alt="" />
+                        <p>{product.speedometr}</p>
+                      </div>
+                      <div className="gearbox box">
+                        <img src={gearbox} alt="" />
+                        <p>{product.category}</p>
+                      </div>
+                      <div className="person box">
+                        <img src={user} alt="" />
+                        <p>{product.place}</p>
+                      </div>
+                      <div className="petrol box">
+                        <img src={gasStation} alt="" />
+                        <p>{product.petrol}</p>
+                      </div>
+                    </CarDetail>
+                  </Box>
                 </CardContent>
               </CardActionArea>
               <RentBtn>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
+                <CardActions>
                   <Button size="small" color="primary">
-                    Rent
+                    Ijaraga Olish
                   </Button>
                 </CardActions>
               </RentBtn>
             </Card>
           ))
         ) : (
-          <NoData></NoData>
+          <p>hech narsa topilmadi</p>
         )}
       </div>
     </Container>

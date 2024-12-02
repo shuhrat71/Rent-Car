@@ -37,8 +37,7 @@ const BackgroundVideo: React.FC = () => {
       >
         <div className="content">
           <Typography variant="h1">
-            Endi boshlab ko‘ring! Sizga kerakli <span>avtomobilni</span> hoziroq
-            bron qiling va qulay sayohatni boshlang.
+            Avtomobil ijarasi xizmatimiz bilan dunyoni g'ildirakda kashf eting
           </Typography>
         </div>
       </Container>

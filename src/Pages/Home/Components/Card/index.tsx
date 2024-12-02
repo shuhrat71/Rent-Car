@@ -1,17 +1,16 @@
+import { Container, Box } from "@mui/material";
+import { CarDetail, RentBtn } from "../Card/card";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import GroupIcon from "@mui/icons-material/Group";
-import GradientIcon from "@mui/icons-material/Gradient";
-import SecurityIcon from "@mui/icons-material/Security";
-import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
-import laceti from "./img/laceti.jpg";
-import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import { Container } from "@mui/material";
-import { RentBtn } from "../Card/card";
+import CardContent from "@mui/material/CardContent";
+import speedometr from "./img/speedometer.svg";
+import gearbox from "./img/gearbox.svg";
+import user from "./img/user.svg";
+import gasStation from "./img/gasStation.svg";
 
 interface Product {
   id: number;
@@ -21,6 +20,8 @@ interface Product {
   petrol: string;
   category: string;
   url: string;
+  speedometr: string;
+  place: number;
 }
 
 const database: Product[] = [
@@ -32,6 +33,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 2,
@@ -41,6 +44,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 3,
@@ -50,6 +55,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Kumushrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 17,
@@ -59,6 +66,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 4,
@@ -68,6 +77,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 5,
@@ -77,6 +88,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 6,
@@ -86,6 +99,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 7,
@@ -95,6 +110,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 8,
@@ -104,6 +121,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 9,
@@ -113,6 +132,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 10,
@@ -122,6 +143,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 11,
@@ -131,6 +154,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 12,
@@ -140,6 +165,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Kulrang",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 13,
@@ -149,6 +176,8 @@ const database: Product[] = [
     price: "6000000",
     color: "Qora",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 14,
@@ -158,6 +187,8 @@ const database: Product[] = [
     price: "6000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 5,
   },
   {
     id: 15,
@@ -167,6 +198,8 @@ const database: Product[] = [
     price: "6000000",
     color: "Oq",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 6,
   },
   {
     id: 16,
@@ -176,6 +209,8 @@ const database: Product[] = [
     price: "6000000",
     color: "Qora",
     petrol: "Benzin",
+    speedometr: "3000km",
+    place: 6,
   },
 
   {
@@ -186,6 +221,8 @@ const database: Product[] = [
     price: "3000000",
     color: "Oq",
     petrol: "Gaz",
+    speedometr: "3000km",
+    place: 8,
   },
 ];
 
@@ -194,48 +231,54 @@ export default function MultiActionAreaCard() {
     <Container maxWidth="xl">
       <div
         style={{
-          width: "100%",
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "20px",
         }}
       >
         {database.length > 0 ? (
           database.map((product) => (
-            <Card sx={{ maxWidth: 375 }} key={product.id}>
+            <Card sx={{ maxWidth: 400 }} key={product.id}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="190"
                   image={product.url}
-                  alt={laceti}
+                  alt={product.url}
                 />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {product.carName}
-                  </Typography>
-                  <Typography
+                  <Typography>{product.carName}</Typography>
+                  <Box
                     sx={{
-                      color: "text.secondary",
+                      width: "375px",
+                      height: "100px",
                       display: "flex",
-                      alignContent: "center",
-                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      background: "#F6F6F6",
+                      borderRadius: "16px",
                     }}
                   >
-                    <Typography>
-                      <GroupIcon />: O'rindiqlar soni : 5
-                    </Typography>
-                    <Typography>
-                      <GradientIcon /> {product.color}
-                    </Typography>
-                    <Typography>
-                      <SecurityIcon />: Garov so'm : {product.price} Kuniga 300
-                      km beriladi unda ortiq har bir kilometr uchun : 1000
-                    </Typography>
-                    <Typography>
-                      <DriveEtaIcon />
-                      {product.petrol}
-                    </Typography>
-                  </Typography>
+                    <CarDetail>
+                      <div className="speedometr box">
+                        <img src={speedometr} alt="" />
+                        <p>{product.speedometr}</p>
+                      </div>
+                      <div className="gearbox box">
+                        <img src={gearbox} alt="" />
+                        <p>{product.category}</p>
+                      </div>
+                      <div className="person box">
+                        <img src={user} alt="" />
+                        <p>{product.place}</p>
+                      </div>
+                      <div className="petrol box">
+                        <img src={gasStation} alt="" />
+                        <p>{product.petrol}</p>
+                      </div>
+                    </CarDetail>
+                  </Box>
                 </CardContent>
               </CardActionArea>
               <RentBtn>

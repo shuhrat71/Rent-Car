@@ -8,9 +8,8 @@ import {
 } from "./headerStyled";
 import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LogoGif } from "./headerStyled";
-import BackgroundVideo from "../../assets";
 type Props = {};
 
 function Header({}: Props) {
@@ -29,41 +28,20 @@ function Header({}: Props) {
           <LogoGif>
             <img src={rentCarLogo} alt="" />
           </LogoGif>
-          <Typography variant="h1" fontSize="26px">
-            Rent
-            <span
-              style={{
-                color: "red",
-                fontWeight: "bold",
-                fontFamily: '"Play", sans-serif',
-              }}
-            >
-              Car
-            </span>
-          </Typography>
         </LogoBox>
         <HeaderLinkWrapper>
           <HeaderLink>
-            <li>
-              <Link to={"/"}>Home</Link>
-            </li>
-            <li>
-              <Link to={"/about"}>About</Link>
-            </li>
-            <li>
-              <a href="">Contact</a>
-            </li>
+            <Typography variant="h1">Rent Car</Typography>
           </HeaderLink>
-
-          <Auth_buttons>
-            <Button variant="contained" onClick={handleButtonClick}>
-              Sign In
-            </Button>
-            <Button variant="contained" onClick={handleSignUpClick}>
-              Sign Up
-            </Button>
-          </Auth_buttons>
         </HeaderLinkWrapper>
+        <Auth_buttons>
+          <Button variant="contained" onClick={handleButtonClick}>
+            Sign In
+          </Button>
+          <Button variant="contained" onClick={handleSignUpClick}>
+            Sign Up
+          </Button>
+        </Auth_buttons>
       </HeaderWrapper>
     </Container>
   );

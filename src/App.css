@@ -7,8 +7,8 @@ body {
   position: relative;
   width: 100%;
   height: 100vh;
-  top: 0;
-  overflow: hidden;
+  z-index: -1;
+  top: -105;
 }
 
 .background-video {
@@ -19,15 +19,14 @@ body {
   object-fit: cover;
   z-index: 1;
 }
-
 .content {
   width: 730px;
-  position: relative;
-  padding: 40px 25px;
+  position: absolute;
+  padding: 0 25px;
+  top: 15%;
   z-index: 1;
   text-align: center;
   color: white;
-  background-color: rgba(255, 255, 255, 0.1);
   font-family: "Georama", sans-serif;
   border-radius: 8px;
 }

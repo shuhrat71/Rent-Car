@@ -2,13 +2,13 @@ import styled from "@emotion/styled";
 
 export const Selectors__wrapper = styled.div`
   width: 100%;
-  padding: 10px 20px;
+  padding: 10px 10px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   margin-bottom: 30px;
   justify-content: space-between;
-  background-color: #ffeb3b;
+  background-color: white;
   gap: 20px;
   input {
     width: 200px;
@@ -26,10 +26,10 @@ export const Selectors__wrapper = styled.div`
 `;
 export const Input_wrapper = styled.div`
   width: 100%;
-  padding: 10px;
   border-radius: 8px;
+  border: 1px solid black;
   input {
-    width: 90%;
+    width: 80%;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 15px;
@@ -38,5 +38,13 @@ export const Input_wrapper = styled.div`
   }
 `;
 export const SelectBox = styled.div`
-  width: 170px;
+  width: 120px;
+`;
+export const CarName = styled.div`
+  width: 100%;
+  padding: 15px 0;
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+  }
 `;

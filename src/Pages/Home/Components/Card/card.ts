@@ -1,31 +1,23 @@
 import styled from "@emotion/styled";
 
-export const CardBody = styled.div`
-  max-width: 380px;
-  min-width: 340px;
-  background-color: red;
-  img {
-    width: 100%;
-  }
-`;
 export const chevroletlogo = styled.div`
   width: 100px;
 `;
 export const RentBtn = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #ffef62;
+  justify-content: center;
+  background-color: #fff;
   button {
+    width: 100%;
     color: #000;
-    padding: 10px 25px;
+    padding: 15px 89px;
     font-weight: 800;
     font-size: 17px;
   }
   button:hover {
-    color: #ffef62;
-    border: 0 solid black;
+    color: #fff;
     background-color: #000;
   }
 `;
@@ -35,4 +27,14 @@ export const NoData = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+export const CarDetail = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
