@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import {
-  Auth_buttons,
-  HeaderLink,
-  HeaderLinkWrapper,
+  HeaderTitle,
   HeaderWrapper,
-  LogoBox,
+  LogoWrapper,
+  Auth_buttons,
 } from "./headerStyled";
 import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { LogoGif } from "./headerStyled";
 type Props = {};
 
 function Header({}: Props) {
@@ -24,16 +22,12 @@ function Header({}: Props) {
   return (
     <Container maxWidth="xl">
       <HeaderWrapper>
-        <LogoBox>
-          <LogoGif>
-            <img src={rentCarLogo} alt="" />
-          </LogoGif>
-        </LogoBox>
-        <HeaderLinkWrapper>
-          <HeaderLink>
-            <Typography variant="h1">Rent Car</Typography>
-          </HeaderLink>
-        </HeaderLinkWrapper>
+        <LogoWrapper>
+          <img src={rentCarLogo} alt="" />
+        </LogoWrapper>
+        <HeaderTitle>
+          <Typography variant="h1">Rental Car</Typography>
+        </HeaderTitle>
         <Auth_buttons>
           <Button variant="contained" onClick={handleButtonClick}>
             Sign In

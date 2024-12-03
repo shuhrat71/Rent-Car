@@ -1,3 +1,5 @@
+import React, { useState, useMemo } from "react";
+import { Typography, Box } from "@mui/material";
 import {
   Select,
   MenuItem,
@@ -6,15 +8,27 @@ import {
   FormControl,
   SelectChangeEvent,
 } from "@mui/material";
+import CardActions from "@mui/material/CardActions";
+import {
+  CarName,
+  Input_wrapper,
+  Selectors__wrapper,
+  SetDataWrapper,
+  Wrapper,
+  InputGroup,
+  Label,
+  InputWrapper,
+  Icon,
+  Input,
+  ButtonElment,
+} from "./select";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
 import CardActionArea from "@mui/material/CardActionArea";
-import React, { useState, useMemo } from "react";
-import { Typography, Box } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import { CarName, Input_wrapper, Selectors__wrapper } from "./select";
 import { CarDetail, RentBtn } from "../Card/card";
 import speedometr from "./img/speedometer.svg";
 import gearbox from "./img/gearbox.svg";
@@ -280,6 +294,51 @@ const Filter: React.FC = () => {
 
   return (
     <Container maxWidth="xl">
+      <SetDataWrapper>
+        <Wrapper>
+          <InputGroup>
+            <Label>Pick-up Location</Label>
+            <InputWrapper>
+              <Icon>
+                <LocationOnIcon />
+              </Icon>
+              <Input type="text" placeholder="Search a location" />
+            </InputWrapper>
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Pick-up date</Label>
+            <InputWrapper>
+              <Icon>
+                <CalendarMonthIcon />
+              </Icon>
+              <Input type="date" defaultValue="2023-12-12" />
+            </InputWrapper>
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Drop-off Location</Label>
+            <InputWrapper>
+              <Icon>
+                <LocationOnIcon />
+              </Icon>
+              <Input type="text" placeholder="Search a location" />
+            </InputWrapper>
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Drop-off date</Label>
+            <InputWrapper>
+              <Icon>
+                <CalendarMonthIcon />
+              </Icon>
+              <Input type="date" defaultValue="2023-12-12" />
+            </InputWrapper>
+          </InputGroup>
+
+          <ButtonElment>Find a Vehicle →</ButtonElment>
+        </Wrapper>
+      </SetDataWrapper>
       <h1
         style={{
           fontSize: "35px",
