@@ -1,4 +1,5 @@
 import Home from "../Pages/Home";
+import Rented from "../Pages/Rented/inxdex";
 import SignIn from "../Pages/SignIn";
 import SignUp from "../Pages/SignUp";
 import { ROUTE_PATHS } from "./paths";
@@ -27,11 +28,15 @@ export const PUBLIC_ROUTES: IRoute[] = [
     component: <SignIn />,
   },
   {
-    path: SIGN_IN,
+    path: "/sign-in",
     component: <SignIn />,
   },
   {
-    path: SIGN_UP,
+    path: "/sign-up",
     component: <SignUp />,
+  },
+  {
+    path: "/rented",
+    component: <Rented />,
   },
 ];

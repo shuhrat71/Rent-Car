@@ -23,7 +23,7 @@ export const HeaderTitle = styled.div`
 export const Auth_buttons = styled.div`
   display: flex;
   align-items: center;
-
+  gap: 10px;
   button {
     padding: 10px 15px;
     border-radius: 15px;

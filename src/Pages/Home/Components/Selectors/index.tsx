@@ -22,6 +22,7 @@ import {
   Input,
   ButtonElment,
 } from "./select";
+import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Card from "@mui/material/Card";
@@ -291,6 +292,11 @@ const Filter: React.FC = () => {
       setProductData(database);
     }
   };
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate("/rented");
+  };
 
   return (
     <Container maxWidth="xl">
@@ -505,7 +511,11 @@ const Filter: React.FC = () => {
               </CardActionArea>
               <RentBtn>
                 <CardActions>
-                  <Button size="small" color="primary">
+                  <Button
+                    onClick={handleButtonClick}
+                    size="small"
+                    color="primary"
+                  >
                     Ijaraga Olish
                   </Button>
                 </CardActions>

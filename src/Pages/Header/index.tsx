@@ -7,7 +7,7 @@ import {
 } from "./headerStyled";
 import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 type Props = {};
 
 function Header({}: Props) {
@@ -33,7 +33,7 @@ function Header({}: Props) {
             Sign In
           </Button>
           <Button variant="contained" onClick={handleSignUpClick}>
-            Sign Up
+            Sign up
           </Button>
         </Auth_buttons>
       </HeaderWrapper>
