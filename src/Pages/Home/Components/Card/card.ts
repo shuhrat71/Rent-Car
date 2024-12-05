@@ -1,8 +1,4 @@
 import styled from "@emotion/styled";
-
-export const chevroletlogo = styled.div`
-  width: 100px;
-`;
 export const RentBtn = styled.div`
   width: 100%;
   display: flex;

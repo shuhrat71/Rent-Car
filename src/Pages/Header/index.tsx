@@ -25,9 +25,7 @@ function Header({}: Props) {
         <LogoWrapper>
           <img src={rentCarLogo} alt="" />
         </LogoWrapper>
-        <HeaderTitle>
-          <Typography variant="h1">Rental Car</Typography>
-        </HeaderTitle>
+
         <Auth_buttons>
           <Button variant="contained" onClick={handleButtonClick}>
             Sign In

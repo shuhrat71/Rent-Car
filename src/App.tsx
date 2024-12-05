@@ -8,6 +8,7 @@ import { SignInWrapper } from "./Pages/SignIn/SignIn";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import path from "path";
+import CardDetail from "./Pages/Rented/inxdex";
 
 function App() {
   const token = "gdfs";
@@ -22,6 +23,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/rented" element={<Rented />} />
+        <Route path="/card/:id" element={<CardDetail />} />
       </Routes>
     );
   }

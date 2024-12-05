@@ -58,17 +58,7 @@ const database: Product[] = [
     speedometr: "3000km",
     place: 5,
   },
-  {
-    id: 17,
-    category: "Avtomat",
-    url: "https://automotive-api.s3.us-east-2.amazonaws.com/5f8b12166d5cc500171c6718/e561c15d-5668-4167-89cd-1d3461a78a4b/onix.png",
-    carName: "Onix",
-    price: "3000000",
-    color: "Kulrang",
-    petrol: "Gaz",
-    speedometr: "3000km",
-    place: 5,
-  },
+
   {
     id: 4,
     category: "Avtomat",
@@ -212,9 +202,19 @@ const database: Product[] = [
     speedometr: "3000km",
     place: 6,
   },
-
   {
-    id: 19,
+    id: 17,
+    category: "Avtomat",
+    url: "https://automotive-api.s3.us-east-2.amazonaws.com/5f8b12166d5cc500171c6718/e561c15d-5668-4167-89cd-1d3461a78a4b/onix.png",
+    carName: "Onix",
+    price: "3000000",
+    color: "Kulrang",
+    petrol: "Gaz",
+    speedometr: "3000km",
+    place: 5,
+  },
+  {
+    id: 18,
     category: "Mexanik",
     url: "https://lionmotors.uz/wp-content/uploads/2020/11/damaswhite.jpg",
     carName: "Damas",
@@ -239,56 +239,57 @@ export default function MultiActionAreaCard() {
       >
         {database.length > 0 ? (
           database.map((product) => (
-            <Card sx={{ maxWidth: 400 }} key={product.id}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="190"
-                  image={product.url}
-                  alt={product.url}
-                />
-                <CardContent>
-                  <Typography>{product.carName}</Typography>
-                  <Box
-                    sx={{
-                      width: "375px",
-                      height: "100px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      background: "#F6F6F6",
-                      borderRadius: "16px",
-                    }}
-                  >
-                    <CarDetail>
-                      <div className="speedometr box">
-                        <img src={speedometr} alt="" />
-                        <p>{product.speedometr}</p>
-                      </div>
-                      <div className="gearbox box">
-                        <img src={gearbox} alt="" />
-                        <p>{product.category}</p>
-                      </div>
-                      <div className="person box">
-                        <img src={user} alt="" />
-                        <p>{product.place}</p>
-                      </div>
-                      <div className="petrol box">
-                        <img src={gasStation} alt="" />
-                        <p>{product.petrol}</p>
-                      </div>
-                    </CarDetail>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
+            <Box
+              sx={{
+                maxWidth: 400,
+              }}
+              key={product.id}
+            >
+              <CardMedia
+                component="img"
+                height="190"
+                image={product.url}
+                alt={product.url}
+              />
+              <CardContent>
+                <Typography>{product.carName}</Typography>
+                <Box
+                  sx={{
+                    width: "375px",
+                    height: "100px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "#F6F6F6",
+                    borderRadius: "16px",
+                  }}
+                >
+                  <CarDetail>
+                    <div className="speedometr box">
+                      <img src={speedometr} alt="" />
+                      <p>{product.speedometr}</p>
+                    </div>
+                    <div className="gearbox box">
+                      <img src={gearbox} alt="" />
+                      <p>{product.category}</p>
+                    </div>
+                    <div className="person box">
+                      <img src={user} alt="" />
+                      <p>{product.place}</p>
+                    </div>
+                    <div className="petrol box">
+                      <img src={gasStation} alt="" />
+                      <p>{product.petrol}</p>
+                    </div>
+                  </CarDetail>
+                </Box>
+              </CardContent>
               <RentBtn>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Ijaraga Olish
-                  </Button>
-                </CardActions>
+                <Button size="small" color="primary">
+                  Ijaraga Olish
+                </Button>
               </RentBtn>
-            </Card>
+            </Box>
           ))
         ) : (
           <p>hech narsa topilmadi</p>

@@ -112,3 +112,21 @@ export const ButtonElment = styled.button`
     background-color: #333;
   }
 `;
+export const Location_Btn = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  button a {
+    text-decoration: none;
+    color: #000;
+  }
+  button {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+  }
+  button:hover {
+    background-color: #000;
+    color: #fff;
+  }
+`;

@@ -21,6 +21,7 @@ import {
   Icon,
   Input,
   ButtonElment,
+  Location_Btn,
 } from "./select";
 import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -238,7 +239,7 @@ const database: Product[] = [
   },
 
   {
-    id: 19,
+    id: 17,
     category: "Mexanik",
     url: "https://lionmotors.uz/wp-content/uploads/2020/11/damaswhite.jpg",
     carName: "Damas",
@@ -294,22 +295,29 @@ const Filter: React.FC = () => {
   };
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate("/rented");
+  const handleCardClick = (id: number) => {
+    if (id) {
+      navigate(`/card/${id}`);
+    } else {
+      navigate("notFound");
+    }
   };
-
   return (
     <Container maxWidth="xl">
       <SetDataWrapper>
         <Wrapper>
           <InputGroup>
             <Label>Pick-up Location</Label>
-            <InputWrapper>
-              <Icon>
-                <LocationOnIcon />
-              </Icon>
-              <Input type="text" placeholder="Search a location" />
-            </InputWrapper>
+            <Location_Btn>
+              <Button variant="contained">
+                <Icon>
+                  <LocationOnIcon />
+                </Icon>
+                <a href="https://www.google.com/maps/place/Greenleaf+ofis./@40.1545604,67.823834,415m/data=!3m1!1e3!4m6!3m5!1s0x38b297002b54a42b:0xfcceac67ff6d24b2!8m2!3d40.1551728!4d67.8237147!16s%2Fg%2F11w9jk2syt?entry=ttu&g_ep=EgoyMDI0MTIwMi4wIKXMDSoASAFQAw%3D%3D">
+                  Got to Location
+                </a>
+              </Button>
+            </Location_Btn>
           </InputGroup>
 
           <InputGroup>
@@ -465,54 +473,64 @@ const Filter: React.FC = () => {
       >
         {productData.length > 0 ? (
           productData.map((product) => (
-            <Card sx={{ maxWidth: 400 }} key={product.id}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="190"
-                  image={product.url}
-                  alt={product.url}
-                />
-                <CardContent>
-                  <CarName>
-                    <Typography variant="h1">{product.carName}</Typography>
-                  </CarName>
-                  <Box
-                    sx={{
-                      width: "375px",
-                      height: "100px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      background: "#F6F6F6",
-                      borderRadius: "16px",
-                    }}
-                  >
-                    <CarDetail>
-                      <div className="speedometr box">
-                        <img src={speedometr} alt="" />
-                        <p>{product.speedometr}</p>
-                      </div>
-                      <div className="gearbox box">
-                        <img src={gearbox} alt="" />
-                        <p>{product.category}</p>
-                      </div>
-                      <div className="person box">
-                        <img src={user} alt="" />
-                        <p>{product.place}</p>
-                      </div>
-                      <div className="petrol box">
-                        <img src={gasStation} alt="" />
-                        <p>{product.petrol}</p>
-                      </div>
-                    </CarDetail>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
+            <Box
+              sx={{
+                maxWidth: 400,
+                borderRadius: "10px",
+                transition: "0.3s",
+                "&:hover": {
+                  boxShadow: 3,
+                  transform: "scale(1.1)",
+                },
+              }}
+              key={product.id}
+            >
+              <CardMedia
+                component="img"
+                height="190"
+                image={product.url}
+                alt={product.url}
+              />
+              <CardContent>
+                <CarName>
+                  <Typography variant="h1">{product.carName}</Typography>
+                </CarName>
+                <Box
+                  sx={{
+                    width: "375px",
+                    height: "100px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "#F6F6F6",
+                    borderRadius: "16px",
+                  }}
+                >
+                  <CarDetail>
+                    <div className="speedometr box">
+                      <img src={speedometr} alt="" />
+                      <p>{product.speedometr}</p>
+                    </div>
+                    <div className="gearbox box">
+                      <img src={gearbox} alt="" />
+                      <p>{product.category}</p>
+                    </div>
+                    <div className="person box">
+                      <img src={user} alt="" />
+                      <p>{product.place}</p>
+                    </div>
+                    <div className="petrol box">
+                      <img src={gasStation} alt="" />
+                      <p>{product.petrol}</p>
+                    </div>
+                  </CarDetail>
+                </Box>
+              </CardContent>
               <RentBtn>
                 <CardActions>
                   <Button
-                    onClick={handleButtonClick}
+                    key={product.id}
+                    onClick={() => handleCardClick(product.id)}
                     size="small"
                     color="primary"
                   >
@@ -520,7 +538,7 @@ const Filter: React.FC = () => {
                   </Button>
                 </CardActions>
               </RentBtn>
-            </Card>
+            </Box>
           ))
         ) : (
           <p>hech narsa topilmadi</p>
@@ -531,3 +549,4 @@ const Filter: React.FC = () => {
 };
 
 export default Filter;
+export { database };
