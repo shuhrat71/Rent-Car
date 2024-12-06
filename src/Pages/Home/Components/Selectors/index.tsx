@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import {
   Select,
@@ -36,6 +36,7 @@ import speedometr from "./img/speedometer.svg";
 import gearbox from "./img/gearbox.svg";
 import user from "./img/user.svg";
 import gasStation from "./img/gasStation.svg";
+import { createClient } from "@supabase/supabase-js";
 
 interface Product {
   id: number;
@@ -251,6 +252,14 @@ const database: Product[] = [
   },
 ];
 
+interface Cars {
+  id: any;
+  name: string;
+  img: string;
+  number: number;
+  textcar: string;
+}
+
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [productData, setProductData] = useState(database);
@@ -258,6 +267,7 @@ const Filter: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPetrol, setSelectedPetrol] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [getData, setData] = useState<any>([]);
 
   const categories = useMemo(
     () => [...Array.from(new Set(database.map((product) => product.category)))],
@@ -302,6 +312,26 @@ const Filter: React.FC = () => {
       navigate("notFound");
     }
   };
+
+  const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
+  const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from("car data").select("*");
+
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        setData(data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Container maxWidth="xl">
       <SetDataWrapper>
@@ -472,7 +502,7 @@ const Filter: React.FC = () => {
         }}
       >
         {productData.length > 0 ? (
-          productData.map((product) => (
+          getData.map((item: any) => (
             <Box
               sx={{
                 maxWidth: 400,
@@ -483,17 +513,17 @@ const Filter: React.FC = () => {
                   transform: "scale(1.1)",
                 },
               }}
-              key={product.id}
+              key={item.id}
             >
               <CardMedia
                 component="img"
                 height="190"
-                image={product.url}
-                alt={product.url}
+                image={item.img}
+                alt={item.url}
               />
               <CardContent>
                 <CarName>
-                  <Typography variant="h1">{product.carName}</Typography>
+                  <Typography variant="h1">{item.carName}</Typography>
                 </CarName>
                 <Box
                   sx={{
@@ -509,19 +539,19 @@ const Filter: React.FC = () => {
                   <CarDetail>
                     <div className="speedometr box">
                       <img src={speedometr} alt="" />
-                      <p>{product.speedometr}</p>
+                      <p>{item.car}</p>
                     </div>
                     <div className="gearbox box">
                       <img src={gearbox} alt="" />
-                      <p>{product.category}</p>
+                      <p>{item.category}</p>
                     </div>
                     <div className="person box">
                       <img src={user} alt="" />
-                      <p>{product.place}</p>
+                      <p>{item.place}</p>
                     </div>
                     <div className="petrol box">
                       <img src={gasStation} alt="" />
-                      <p>{product.petrol}</p>
+                      <p>{item.petrol}</p>
                     </div>
                   </CarDetail>
                 </Box>
@@ -529,8 +559,8 @@ const Filter: React.FC = () => {
               <RentBtn>
                 <CardActions>
                   <Button
-                    key={product.id}
-                    onClick={() => handleCardClick(product.id)}
+                    key={item.id}
+                    onClick={() => handleCardClick(item.id)}
                     size="small"
                     color="primary"
                   >

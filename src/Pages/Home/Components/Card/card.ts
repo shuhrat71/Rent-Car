@@ -28,6 +28,7 @@ export const CarDetail = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
+  padding-top: 20px;
   .box {
     display: flex;
     flex-direction: column;

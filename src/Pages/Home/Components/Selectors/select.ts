@@ -37,9 +37,6 @@ export const Input_wrapper = styled.div`
     border: 0;
   }
 `;
-export const SelectBox = styled.div`
-  width: 120px;
-`;
 export const CarName = styled.div`
   width: 100%;
   padding: 15px 0;
@@ -124,9 +121,5 @@ export const Location_Btn = styled.div`
     width: 100%;
     background-color: #fff;
     color: #000;
-  }
-  button:hover {
-    background-color: #000;
-    color: #fff;
   }
 `;

@@ -10,6 +10,7 @@ import gearbox from "../Home/Components/Selectors/img/gearbox.svg";
 import user from "../Home/Components/Selectors/img/user.svg";
 import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
 import { CarInfo, RentedCar_Wrapper } from ".";
+import Header from "../Header";
 
 type CardDetailParams = {
   id: string;
@@ -28,9 +29,9 @@ const CardDetail: React.FC = () => {
   if (!card) {
     return <p>Error: No card found for ID {cardId}</p>;
   }
-
   return (
     <Container>
+      <Header />
       <h1>Card Detail</h1>
       <RentedCar_Wrapper>
         <Box sx={{ maxWidth: 400 }} key={card.id}>
@@ -53,6 +54,7 @@ const CardDetail: React.FC = () => {
                 aligncards: "center",
                 background: "#F6F6F6",
                 borderRadius: "16px",
+                mt: 2,
               }}
             >
               <CarDetail>

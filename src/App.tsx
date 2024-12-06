@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import NotFound from "./Pages/NotFound";
+import NotFound from "./Pages/Home/NotFound";
 import { IRoute, PRIVATE_ROUTES, PUBLIC_ROUTES } from "./routes";
 import Rented from "./Pages/Rented/inxdex";
 import { SignInWrapper } from "./Pages/SignIn/SignIn";
