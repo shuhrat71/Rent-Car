@@ -242,6 +242,7 @@ export default function MultiActionAreaCard() {
             <Box
               sx={{
                 maxWidth: 400,
+                border: "1px solid red",
               }}
               key={product.id}
             >

@@ -143,7 +143,7 @@ const database: Product[] = [
     id: 8,
     category: "Mexanik",
     url: "https://spb.autoglass-russia.ru/img/auto/chevrolet-lacetti.png",
-    carName: "Laseti",
+    carName: "Lasetti",
     price: "3000000",
     color: "Qora",
     petrol: "Gaz",
@@ -411,7 +411,7 @@ const Filter: React.FC = () => {
             sx={{
               color: "black",
             }}
-          >
+            >
             Uzatma turi
           </InputLabel>
           <Select
@@ -423,7 +423,7 @@ const Filter: React.FC = () => {
               handleSearch(value, "category");
               setSelectedCategory(value);
             }}
-          >
+            >
             {categories.map((category) => (
               <MenuItem value={category} key={category}>
                 {category}
@@ -443,7 +443,7 @@ const Filter: React.FC = () => {
               handleSearch(event.target.value, "color");
               setSelectedColor(value);
             }}
-          >
+            >
             {colors.map((color) => (
               <MenuItem value={color} key={color}>
                 {color}
@@ -463,7 +463,7 @@ const Filter: React.FC = () => {
               handleSearch(event.target.value, "price");
               setSelectedPrice(value);
             }}
-          >
+            >
             {price.map((value) => (
               <MenuItem value={value} key={value}>
                 {value}
@@ -483,7 +483,7 @@ const Filter: React.FC = () => {
               handleSearch(event.target.value, "petrol");
               setSelectedPetrol(value);
             }}
-          >
+            >
             {petrol.map((value) => (
               <MenuItem value={value} key={value}>
                 {value}
@@ -500,7 +500,7 @@ const Filter: React.FC = () => {
           justifyContent: "center",
           gap: "20px",
         }}
-      >
+        >
         {productData.length > 0 ? (
           getData.map((item: any) => (
             <Box
@@ -514,16 +514,16 @@ const Filter: React.FC = () => {
                 },
               }}
               key={item.id}
-            >
+              >
               <CardMedia
                 component="img"
                 height="190"
                 image={item.img}
                 alt={item.url}
-              />
+                />
               <CardContent>
                 <CarName>
-                  <Typography variant="h1">{item.carName}</Typography>
+                  <Typography variant="h1">{item.name}</Typography>
                 </CarName>
                 <Box
                   sx={{
@@ -539,19 +539,19 @@ const Filter: React.FC = () => {
                   <CarDetail>
                     <div className="speedometr box">
                       <img src={speedometr} alt="" />
-                      <p>{item.car}</p>
+                      <p>{item.tachometer}</p>
                     </div>
                     <div className="gearbox box">
                       <img src={gearbox} alt="" />
-                      <p>{item.category}</p>
+                      <p>{item.gearbox}</p>
                     </div>
                     <div className="person box">
                       <img src={user} alt="" />
-                      <p>{item.place}</p>
+                      <p>{item.number}</p>
                     </div>
                     <div className="petrol box">
                       <img src={gasStation} alt="" />
-                      <p>{item.petrol}</p>
+                      <p>{item.textcar}</p>
                     </div>
                   </CarDetail>
                 </Box>
