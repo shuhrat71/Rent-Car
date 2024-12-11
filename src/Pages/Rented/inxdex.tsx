@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { database } from "../Home/Components/Selectors";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { Typography, Box, Container } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { CarDetail } from "../Home/Components/Card/card";
@@ -11,23 +11,51 @@ import user from "../Home/Components/Selectors/img/user.svg";
 import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
 import { CarInfo, RentedCar_Wrapper } from ".";
 import Header from "../Header";
+import { createClient } from "@supabase/supabase-js";
 
 type CardDetailParams = {
   id: string;
 };
+interface Cars {
+  id: string;
+  name: string;
+  img: string;
+  number: number;
+  textcar: string;
+  tachometer: string;
+  gearbox: string;
+}
 const CardDetail: React.FC = () => {
   const { id } = useParams<CardDetailParams>();
-
+  const [card, setCard] = useState<Cars>();
   if (!id || isNaN(Number(id))) {
     return <p>Error: Invalid or missing ID</p>;
   }
 
-  const cardId = Number(id);
-  const card = database.find((card) => card.id === cardId);
-  console.log(card);
+  const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
+  const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const fetchDataById = async (id: any) => {
+    const { data, error } = await supabase
+      .from("car data")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching data by ID:", error.message);
+      return null;
+    }
+    setCard(data);
+  };
+  useEffect(() => {
+    fetchDataById(id);
+  }, [id]);
 
   if (!card) {
-    return <p>Error: No card found for ID {cardId}</p>;
+    return <p>Error: No card found for ID {id}</p>;
   }
   return (
     <Container>
@@ -38,12 +66,12 @@ const CardDetail: React.FC = () => {
           <CardMedia
             component="img"
             height="190"
-            image={card.url}
-            alt={card.url}
+            image={card.img}
+            alt={card.name}
           />
           <CardContent>
             <Typography sx={{ fontSize: "27px" }} variant="h1">
-              {card.carName}
+              {card.name}
             </Typography>
             <Box
               sx={{
@@ -60,19 +88,19 @@ const CardDetail: React.FC = () => {
               <CarDetail>
                 <div className="speedometr box">
                   <img src={speedometr} alt="" />
-                  <p>{card.speedometr}</p>
+                  <p>{card.tachometer}</p>
                 </div>
                 <div className="gearbox box">
                   <img src={gearbox} alt="" />
-                  <p>{card.category}</p>
+                  <p>{card.gearbox}</p>
                 </div>
                 <div className="person box">
                   <img src={user} alt="" />
-                  <p>{card.place}</p>
+                  <p>{card.number}</p>
                 </div>
                 <div className="petrol box">
                   <img src={gasStation} alt="" />
-                  <p>{card.petrol}</p>
+                  <p>{card.textcar}</p>
                 </div>
               </CarDetail>
             </Box>

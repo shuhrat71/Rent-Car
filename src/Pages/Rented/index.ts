@@ -15,10 +15,8 @@ export const CarDetail = styled.div`
 export const RentedCar_Wrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
-  background-color: red;
 `;
 export const CarInfo = styled.div`
   width: 100%;
   display: flex;
-  background-color: wheat;
 `;
