@@ -34,7 +34,7 @@ export const PUBLIC_ROUTES: IRoute[] = [
   },
   {
     path: "/sign-up",
-    component: <SignUp />,
+    component: <CardDetail />,
   },
   {
     path: "/rented",

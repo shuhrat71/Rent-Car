@@ -16,6 +16,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      {/* <AdminPanel /> */}
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -7,9 +7,11 @@ import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider, Navigation, Router } from "@toolpad/core";
 import { DashboardLayout } from "@toolpad/core";
 import { PageContainer } from "@toolpad/core";
+
 import GradingIcon from "@mui/icons-material/Grading";
 import { OrderedList } from "./orders";
 import MultiActionAreaCard from "../Home/Components/Card";
+import { CarDetail } from "../Rented";
 
 const NAVIGATION: Navigation = [
   {
@@ -58,20 +60,6 @@ const NAVIGATION: Navigation = [
   },
 ];
 
-const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: "class",
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -86,13 +74,6 @@ function useDemoRouter(initialPath: string): Router {
   return router;
 }
 
-const Skeleton = styled("div")<{ height: number }>(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
-
 export default function AdminPanel(props: any) {
   const { window } = props;
 
@@ -100,23 +81,29 @@ export default function AdminPanel(props: any) {
 
   const demoWindow = window ? window() : undefined;
 
+  const renderContent = () => {
+    switch (router.pathname) {
+      case "/ordered": // "Buyurtma qilinganlar"
+        return (
+          <OrderedList>
+            <CarDetail />
+          </OrderedList>
+        );
+      case "/yangi mashina qo'shish": // "Yangi mashina qo'shish"
+        return <MultiActionAreaCard />;
+      default:
+        return <h1>Welcome to Admin Panel</h1>;
+    }
+  };
+
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      router={router}
-      theme={demoTheme}
-      window={demoWindow}
-    >
+    <AppProvider navigation={NAVIGATION} router={router} window={demoWindow}>
       <DashboardLayout
         sx={{
           width: "100%",
         }}
       >
-        <PageContainer maxWidth="xl">
-          <OrderedList>
-            <MultiActionAreaCard />
-          </OrderedList>
-        </PageContainer>
+        <PageContainer maxWidth="xl">{renderContent()}</PageContainer>
       </DashboardLayout>
     </AppProvider>
   );

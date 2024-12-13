@@ -9,6 +9,7 @@ import speedometr from "../Home/Components/Selectors/img/speedometer.svg";
 import gearbox from "../Home/Components/Selectors/img/gearbox.svg";
 import user from "../Home/Components/Selectors/img/user.svg";
 import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
+import CircularProgress from "@mui/material/CircularProgress";
 import { CarInfo, RentedCar_Wrapper } from ".";
 import Header from "../Header";
 import { createClient } from "@supabase/supabase-js";
@@ -28,34 +29,61 @@ interface Cars {
 const CardDetail: React.FC = () => {
   const { id } = useParams<CardDetailParams>();
   const [card, setCard] = useState<Cars>();
-  if (!id || isNaN(Number(id))) {
-    return <p>Error: Invalid or missing ID</p>;
-  }
+  const [loading, setLoading] = useState(true);
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
   const supabaseKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const fetchDataById = async (id: any) => {
-    const { data, error } = await supabase
-      .from("car data")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      console.error("Error fetching data by ID:", error.message);
-      return null;
-    }
-    setCard(data);
-  };
   useEffect(() => {
-    fetchDataById(id);
+    const fetchDataById = async (id: any) => {
+      try {
+        const { data, error } = await supabase
+          .from("car data")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching data by ID:", error.message);
+          return null;
+        }
+        setCard(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      }
+    };
+    if (id) {
+      fetchDataById(id);
+    }
   }, [id]);
 
+  if (!id || isNaN(Number(id))) {
+    return <p>Error: Invalid or missing ID</p>;
+  }
   if (!card) {
-    return <p>Error: No card found for ID {id}</p>;
+    return <p></p>;
+  }
+  function CircularIndeterminate() {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          height: "70vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (loading) {
+    return CircularIndeterminate();
   }
   return (
     <Container>

@@ -36,11 +36,34 @@ interface Cars {
   number: number;
   textcar: string;
 }
-
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const fetchData = async () => {
+    const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data, error } = await supabase.from("car data").select("*");
+    console.log(data);
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      setData(data || []);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const navigate = useNavigate();
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   const handleSearch = (value: string, type: string) => {
     console.log(value);
@@ -54,7 +77,6 @@ const Filter: React.FC = () => {
       setData([]);
     }
   };
-  const navigate = useNavigate();
 
   const handleCardClick = (id: number) => {
     if (id) {
@@ -68,25 +90,6 @@ const Filter: React.FC = () => {
   const supabaseKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
   const supabase = createClient(supabaseUrl, supabaseKey);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase.from("car data").select("*");
-      console.log(data);
-      if (error) {
-        console.error("Error fetching data:", error);
-      } else {
-        setData(data || []);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <Container maxWidth="xl">
@@ -137,6 +140,20 @@ const Filter: React.FC = () => {
           </InputGroup>
 
           <ButtonElment>Find a Vehicle →</ButtonElment>
+          <Selectors__wrapper>
+            <Input_wrapper>
+              <input
+                type="text"
+                value={search}
+                placeholder="Qidiruv..."
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = event.target.value;
+                  handleSearch(value, "carName");
+                  setSearch(value);
+                }}
+              />
+            </Input_wrapper>
+          </Selectors__wrapper>
         </Wrapper>
       </SetDataWrapper>
       <h1
@@ -147,20 +164,6 @@ const Filter: React.FC = () => {
       >
         Mahsulot Filtri
       </h1>
-      <Selectors__wrapper>
-        <Input_wrapper>
-          <input
-            type="text"
-            value={search}
-            placeholder="Qidiruv..."
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const value = event.target.value;
-              handleSearch(value, "carName");
-              setSearch(value);
-            }}
-          />
-        </Input_wrapper>
-      </Selectors__wrapper>
 
       <div
         style={{
@@ -240,7 +243,8 @@ const Filter: React.FC = () => {
             </Box>
           ))
         ) : (
-          <p>hech narsa topilmadi</p>
+          // <CalendarMonthIcon />
+          <p></p>
         )}
       </div>
     </Container>
