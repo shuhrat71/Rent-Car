@@ -19,6 +19,7 @@ interface Product {
   textcar: string;
   tachometer: string;
   gearbox: string;
+  chevrolet_Logo: string;
 }
 
 export default function MultiActionAreaCard() {
@@ -87,7 +88,9 @@ export default function MultiActionAreaCard() {
                   alt={item.img}
                 />
                 <CardContent>
-                  <Typography>{item.name}</Typography>
+                  <Typography>
+                    {item.name} <img src={item.chevrolet_Logo} alt="" />
+                  </Typography>
                   <Box
                     sx={{
                       width: "375px",

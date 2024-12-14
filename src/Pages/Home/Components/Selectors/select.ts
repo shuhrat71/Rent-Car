@@ -40,9 +40,15 @@ export const Input_wrapper = styled.div`
 export const CarName = styled.div`
   width: 100%;
   padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   h1 {
     font-size: 20px;
     font-weight: 600;
+  }
+  img {
+    width: 70px;
   }
 `;
 export const SetDataWrapper = styled.div`

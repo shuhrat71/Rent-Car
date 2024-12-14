@@ -35,6 +35,7 @@ interface Cars {
   img: string;
   number: number;
   textcar: string;
+  chevrolet_Logo: string;
 }
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
@@ -196,6 +197,7 @@ const Filter: React.FC = () => {
               <CardContent>
                 <CarName>
                   <Typography variant="h1">{item.name}</Typography>
+                  <img src={item.chevrolet_Logo} alt="" />
                 </CarName>
                 <Box
                   sx={{

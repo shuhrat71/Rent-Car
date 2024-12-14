@@ -1,5 +1,4 @@
 import * as React from "react";
-import { extendTheme, styled } from "@mui/material/styles";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -7,27 +6,27 @@ import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider, Navigation, Router } from "@toolpad/core";
 import { DashboardLayout } from "@toolpad/core";
 import { PageContainer } from "@toolpad/core";
-
 import GradingIcon from "@mui/icons-material/Grading";
 import { OrderedList } from "./orders";
 import MultiActionAreaCard from "../Home/Components/Card";
 import { CarDetail } from "../Rented";
+import Header from "../Header";
 
 const NAVIGATION: Navigation = [
   {
     kind: "header",
     title: "Main items",
   },
+  {
+    segment: "ordered",
+    title: "Buyurtma qilinganlar",
+    icon: <GradingIcon />,
+  },
 
   {
     segment: "yangi mashina qo'shish",
     title: "Yangi mashina qo'shish",
     icon: <AddCircleOutlineIcon />,
-  },
-  {
-    segment: "ordered",
-    title: "Buyurtma qilinganlar",
-    icon: <GradingIcon />,
   },
   {
     kind: "divider",
@@ -89,10 +88,12 @@ export default function AdminPanel(props: any) {
             <CarDetail />
           </OrderedList>
         );
-      case "/yangi mashina qo'shish": // "Yangi mashina qo'shish"
+      case "/Buyurtma qilinganlar":
         return <MultiActionAreaCard />;
+      case "/Yangi mashina qo'shish":
+        return <Header></Header>;
       default:
-        return <h1>Welcome to Admin Panel</h1>;
+        return;
     }
   };
 

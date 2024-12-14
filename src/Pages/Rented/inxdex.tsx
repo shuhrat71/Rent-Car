@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-
 import React, { useEffect, useState } from "react";
 import { Typography, Box, Container } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -25,6 +24,7 @@ interface Cars {
   textcar: string;
   tachometer: string;
   gearbox: string;
+  chevrolet_Logo: string;
 }
 const CardDetail: React.FC = () => {
   const { id } = useParams<CardDetailParams>();
@@ -98,8 +98,23 @@ const CardDetail: React.FC = () => {
             alt={card.name}
           />
           <CardContent>
-            <Typography sx={{ fontSize: "27px" }} variant="h1">
-              {card.name}
+            <Typography
+              sx={{
+                fontSize: "27px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItem: "center",
+              }}
+              variant="h1"
+            >
+              {card.name}{" "}
+              <img
+                style={{
+                  width: "70px",
+                }}
+                src={card.chevrolet_Logo}
+                alt=""
+              />
             </Typography>
             <Box
               sx={{

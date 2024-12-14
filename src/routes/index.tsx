@@ -10,7 +10,7 @@ export interface IRoute {
   component: JSX.Element | JSX.Element[];
 }
 
-const { HOME, SIGN_IN, SIGN_UP } = ROUTE_PATHS;
+const { HOME } = ROUTE_PATHS;
 
 export const PRIVATE_ROUTES: IRoute[] = [
   {
@@ -34,7 +34,7 @@ export const PUBLIC_ROUTES: IRoute[] = [
   },
   {
     path: "/sign-up",
-    component: <CardDetail />,
+    component: <SignUp />,
   },
   {
     path: "/rented",
