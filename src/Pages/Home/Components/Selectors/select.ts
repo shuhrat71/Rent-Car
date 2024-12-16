@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
 
 export const Selectors__wrapper = styled.div`
-  width: 100%;
+  width: 70%;
   padding: 10px 10px;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
   justify-content: space-between;
   background-color: white;
   gap: 20px;

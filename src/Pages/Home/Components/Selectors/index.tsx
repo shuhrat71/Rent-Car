@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Typography, Box } from "@mui/material";
 import { Container } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
@@ -55,6 +56,7 @@ const Filter: React.FC = () => {
       setData(data || []);
     }
     setLoading(false);
+    localStorage.setItem("carData", JSON.stringify(data));
   };
 
   useEffect(() => {
@@ -62,8 +64,22 @@ const Filter: React.FC = () => {
   }, []);
   const navigate = useNavigate();
 
+  function CircularIndeterminate() {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          height: "70vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   if (loading) {
-    return <p>Loading...</p>;
+    return CircularIndeterminate();
   }
 
   const handleSearch = (value: string, type: string) => {
@@ -74,6 +90,7 @@ const Filter: React.FC = () => {
         return item[type]?.toLowerCase().includes(value.toLowerCase());
       });
       setData(searchResult);
+      localStorage.setItem("searchData", JSON.stringify(searchResult));
     } else {
       setData([]);
     }
@@ -119,7 +136,20 @@ const Filter: React.FC = () => {
               <Input type="date" defaultValue="2023-12-12" />
             </InputWrapper>
           </InputGroup>
-
+          <Selectors__wrapper>
+            <Input_wrapper>
+              <input
+                type="text"
+                value={search}
+                placeholder="Qidiruv..."
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = event.target.value;
+                  handleSearch(value, "carName");
+                  setSearch(value);
+                }}
+              />
+            </Input_wrapper>
+          </Selectors__wrapper>
           <InputGroup>
             <Label>Drop-off Location</Label>
             <InputWrapper>
@@ -141,20 +171,6 @@ const Filter: React.FC = () => {
           </InputGroup>
 
           <ButtonElment>Find a Vehicle →</ButtonElment>
-          <Selectors__wrapper>
-            <Input_wrapper>
-              <input
-                type="text"
-                value={search}
-                placeholder="Qidiruv..."
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = event.target.value;
-                  handleSearch(value, "carName");
-                  setSearch(value);
-                }}
-              />
-            </Input_wrapper>
-          </Selectors__wrapper>
         </Wrapper>
       </SetDataWrapper>
       <h1
@@ -245,8 +261,7 @@ const Filter: React.FC = () => {
             </Box>
           ))
         ) : (
-          // <CalendarMonthIcon />
-          <p></p>
+          <CalendarMonthIcon />
         )}
       </div>
     </Container>

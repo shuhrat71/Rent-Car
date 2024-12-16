@@ -5,12 +5,14 @@ export const RentBtn = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #fff;
+  border-radius: 15px;
   button {
     width: 100%;
     color: #000;
     padding: 15px 89px;
     font-weight: 800;
     font-size: 17px;
+    border: 1px solid #000;
   }
   button:hover {
     color: #fff;
