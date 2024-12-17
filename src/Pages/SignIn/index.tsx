@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/system";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CreateAcc, InputBox, SignInWrapper } from "./SignIn";
 import {
   Button,
@@ -14,25 +14,53 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { createClient } from "@supabase/supabase-js";
 
-type Props = {};
+interface Users {
+  user: string;
+  password: string;
+  email: string;
+  number: string;
+  name: string;
+}
 
-function SignIn({}: Props) {
+const SignIn: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [value, setValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [userData, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data, error } = await supabase.from("Users").select("*");
+    console.log(data);
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      setData(data || []);
+    }
+    setLoading(false);
+    localStorage.setItem("carData", JSON.stringify(data));
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
 
-    // Uzunlikni tekshirish
-    if (inputValue.length > 10) {
+    if (inputValue.length < 10) {
       setError("Qiymat 10 ta belgidan oshmasligi kerak!");
     } else {
-      setError(null); // Xato yo'q
+      setError(null);
     }
 
-    setValue(inputValue); // Qiymatni yangilash
+    setValue(inputValue);
   };
 
   const handleSubmit = () => {
@@ -116,7 +144,9 @@ function SignIn({}: Props) {
           </FormControl>
         </InputBox>
         <CreateAcc>
-          <Button variant="contained">Login</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Login
+          </Button>
           <Typography>
             Already Have An Account?
             <Link
@@ -131,6 +161,6 @@ function SignIn({}: Props) {
       </SignInWrapper>
     </Container>
   );
-}
+};
 
 export default SignIn;
