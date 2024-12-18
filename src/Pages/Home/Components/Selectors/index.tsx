@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Typography, Box } from "@mui/material";
 import { Container } from "@mui/material";
@@ -17,11 +17,11 @@ import {
   ButtonElment,
   Location_Btn,
 } from "./select";
-import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
+import { useNavigate } from "react-router-dom";
 import CardContent from "@mui/material/CardContent";
 import { CarDetail, RentBtn } from "../Card/card";
 import speedometr from "./img/speedometer.svg";
@@ -29,6 +29,7 @@ import gearbox from "./img/gearbox.svg";
 import user from "./img/user.svg";
 import gasStation from "./img/gasStation.svg";
 import { createClient } from "@supabase/supabase-js";
+import NotFound from "../../../../NotFound";
 
 interface Cars {
   id: any;
@@ -83,7 +84,6 @@ const Filter: React.FC = () => {
   }
 
   const handleSearch = (value: string, type: string) => {
-    console.log(value);
     if (value) {
       const searchResult = getData.filter((item: any) => {
         console.log("item type:", item[type]);
@@ -103,11 +103,6 @@ const Filter: React.FC = () => {
       navigate("notFound");
     }
   };
-
-  const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
-  const supabaseKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
-  const supabase = createClient(supabaseUrl, supabaseKey);
 
   return (
     <Container maxWidth="xl">
@@ -136,20 +131,7 @@ const Filter: React.FC = () => {
               <Input type="date" defaultValue="2023-12-12" />
             </InputWrapper>
           </InputGroup>
-          <Selectors__wrapper>
-            <Input_wrapper>
-              <input
-                type="text"
-                value={search}
-                placeholder="Qidiruv..."
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = event.target.value;
-                  handleSearch(value, "carName");
-                  setSearch(value);
-                }}
-              />
-            </Input_wrapper>
-          </Selectors__wrapper>
+
           <InputGroup>
             <Label>Drop-off Location</Label>
             <InputWrapper>
@@ -261,7 +243,7 @@ const Filter: React.FC = () => {
             </Box>
           ))
         ) : (
-          <CalendarMonthIcon />
+          <NotFound />
         )}
       </div>
     </Container>

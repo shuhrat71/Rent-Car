@@ -1,6 +1,7 @@
 import { Box, Container } from "@mui/system";
 import React, { useState, useEffect } from "react";
 import { CreateAcc, InputBox, SignInWrapper } from "./SignIn";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Link,
@@ -54,7 +55,7 @@ const SignIn: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
 
-    if (inputValue.length < 10) {
+    if (inputValue.length < 10 && inputValue.includes("@gmail.com")) {
       setError("Qiymat 10 ta belgidan oshmasligi kerak!");
     } else {
       setError(null);
@@ -63,11 +64,12 @@ const SignIn: React.FC = () => {
     setValue(inputValue);
   };
 
+  const navigate = useNavigate();
   const handleSubmit = () => {
     if (value.length === 0) {
       setError("Maydon bo'sh bo'lishi mumkin emas!");
     } else if (!error) {
-      alert("Form muvaffaqiyatli jo'natildi!");
+      navigate("/");
     }
   };
 

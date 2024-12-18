@@ -1,7 +1,11 @@
 function NotFound() {
   return (
     <div>
-      <p>NotFound</p>
+      <img
+        src="https://beta.mycenter.uz/static/media/empty-box.6254fb5ec7a10744e8d8.png"
+        alt=""
+      />
+      <p>Maʼlumot topilmadi</p>
     </div>
   );
 }
