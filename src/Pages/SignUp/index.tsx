@@ -43,6 +43,14 @@ function SignUp({}: Props) {
               background: "#FFFFFF",
             }}
           />
+          Already Have An Account?
+          <Link
+            sx={{
+              cursor: "pointer",
+            }}
+          >
+            Log in
+          </Link>
         </InputBox>
       </SignInWrapper>
     </Container>

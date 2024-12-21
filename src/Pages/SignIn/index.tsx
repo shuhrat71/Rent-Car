@@ -51,7 +51,7 @@ const SignIn: React.FC<SignInProps> = () => {
     try {
       const { data, error } = await supabase.from("car data").select("*");
       if (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:");
       } else {
         setData(data || []);
         localStorage.setItem("carData", JSON.stringify(data));
@@ -67,44 +67,72 @@ const SignIn: React.FC<SignInProps> = () => {
     FetchData();
   }, []);
   const navigate = useNavigate();
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    const notify = () => toast("Wow so easy!");
     if (inputValue.trim() === "") {
       setError("Emailni kiriting!");
-    } else if (!inputValue.includes("@gmail.com")) {
+      return;
+    }
+    if (!inputValue.includes("@gmail.com")) {
       setError("Faqat Gmail manzillariga ruxsat berilgan!");
-    } else if (inputValue.length > 50) {
+      return;
+    }
+    if (inputValue.length > 50) {
       setError("Qiymat 50 ta belgidan oshmasligi kerak!");
-    } else {
+      return;
+    }
+    {
       setError(null);
     }
-
     setValue(inputValue);
   };
 
   const handleSubmit = async () => {
-    if (error || value.trim() === "") {
+    const notifyError = () =>
+      toast.error("Ma'lumot yuborishda xatolik yuz berdi!");
+    const notifyDuplicate = () =>
+      toast.error("Bu email allaqachon ro'yxatdan o'tgan!");
+
+    if (value.trim() === "") {
+      notifyError();
       return;
     }
 
     try {
-      const { data, error } = await supabase
-        .from("car data")
+      // Check if the email already exists in the database
+      const { data: existingUser, error: checkError } = await supabase
+        .from("Users")
+        .select("*")
+        .eq("email", value)
+        .single();
+
+      if (checkError) {
+        console.error("Error checking existing email:", checkError);
+        notifyError();
+        return;
+      }
+
+      if (existingUser) {
+        console.log("Bu email allaqachon ro'yxatdan o'tgan!");
+        notifyDuplicate();
+        return;
+      }
+
+      const { data, error: insertError } = await supabase
+        .from("Users")
         .insert([{ email: value }]);
 
-      if (error) {
-        console.error("Error inserting data:", error);
-        alert("Ma'lumot yuborishda xatolik yuz berdi!");
+      if (insertError) {
+        console.error("Error inserting data:", insertError);
+        notifyError();
       } else {
-        console.log("Data inserted:", data);
-        navigate("/");
+        console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
         FetchData();
         setValue("");
+        navigate("/");
       }
     } catch (err) {
-      console.error("Unexpected error:", err);
+      console.error("Kutilmagan xatolik yuz berdi:", err);
       alert("Kutilmagan xatolik yuz berdi!");
     }
   };

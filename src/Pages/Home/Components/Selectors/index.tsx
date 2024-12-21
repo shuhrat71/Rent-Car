@@ -29,7 +29,7 @@ import gearbox from "./img/gearbox.svg";
 import user from "./img/user.svg";
 import gasStation from "./img/gasStation.svg";
 import { createClient } from "@supabase/supabase-js";
-import NotFound from "../../../../NotFound";
+import NotFound from "../../../../components/NotFound";
 
 interface Cars {
   id: any;
