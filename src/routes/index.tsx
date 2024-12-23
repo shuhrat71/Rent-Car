@@ -1,7 +1,9 @@
+import AdminPanel from "../Pages/Admin";
 import Home from "../Pages/Home";
 import CardDetail from "../Pages/Rented/inxdex";
 import Rented from "../Pages/Rented/inxdex";
-import SignIn from "../Pages/SignIn";
+import LogIn from "../Pages/LogIn";
+import SignIn from "../Pages/LogIn";
 import SignUp from "../Pages/SignUp";
 import { ROUTE_PATHS } from "./paths";
 
@@ -29,8 +31,8 @@ export const PUBLIC_ROUTES: IRoute[] = [
     component: <SignIn />,
   },
   {
-    path: "/sign-in",
-    component: <SignIn />,
+    path: "/log-in",
+    component: <LogIn />,
   },
   {
     path: "/sign-up",
@@ -43,5 +45,9 @@ export const PUBLIC_ROUTES: IRoute[] = [
   {
     path: "/card-detial",
     component: <CardDetail />,
+  },
+  {
+    path: "/admin",
+    component: <AdminPanel />,
   },
 ];

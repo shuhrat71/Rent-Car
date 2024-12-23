@@ -1,12 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
-import { Box, Container } from "@mui/system";
-import React, { useState, useEffect } from "react";
-import { CreateAcc, InputBox, SignInWrapper } from "./SignIn";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+
+import { Container } from "@mui/system";
+import { CreateAcc, InputBox, LogInWrapper } from "./LogIn";
 import {
   Button,
-  Link,
   TextField,
   Typography,
   FormControl,
@@ -19,8 +19,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 
 interface Users {
   user: string;
@@ -30,11 +28,11 @@ interface Users {
   name: string;
 }
 
-interface SignInProps {
-  onLoginSuccess?: (isLoggedIn: boolean) => void; // Example prop
+interface LogInProps {
+  onLoginSuccess?: (isLoggedIn: boolean) => void;
 }
 
-const SignIn: React.FC<SignInProps> = () => {
+const LogIn: React.FC<LogInProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [value, setValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -69,14 +67,6 @@ const SignIn: React.FC<SignInProps> = () => {
   const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    if (inputValue.trim() === "") {
-      setError("Emailni kiriting!");
-      return;
-    }
-    if (!inputValue.includes("@gmail.com")) {
-      setError("Faqat Gmail manzillariga ruxsat berilgan!");
-      return;
-    }
     if (inputValue.length > 50) {
       setError("Qiymat 50 ta belgidan oshmasligi kerak!");
       return;
@@ -98,8 +88,16 @@ const SignIn: React.FC<SignInProps> = () => {
       return;
     }
 
+    if (value.trim() === "") {
+      setError("Emailni kiriting!");
+      return;
+    }
+    if (!value.endsWith("@gmail.com")) {
+      setError("Faqat Gmail manzillariga ruxsat berilgan!");
+      return;
+    }
+
     try {
-      // Check if the email already exists in the database
       const { data: existingUser, error: checkError } = await supabase
         .from("Users")
         .select("*")
@@ -161,7 +159,7 @@ const SignIn: React.FC<SignInProps> = () => {
         alignItems: "center",
       }}
     >
-      <SignInWrapper>
+      <LogInWrapper>
         <Typography variant="h1" fontSize={"29px"} marginBottom={"8px"}>
           Hi, Welcome Back!
         </Typography>
@@ -217,19 +215,9 @@ const SignIn: React.FC<SignInProps> = () => {
             Login
           </Button>
           <ToastContainer />
-          <Typography>
-            Already Have An Account?
-            <Link
-              sx={{
-                cursor: "pointer",
-              }}
-            >
-              Log in
-            </Link>
-          </Typography>
         </CreateAcc>
-      </SignInWrapper>
+      </LogInWrapper>
     </Container>
   );
 };
-export default SignIn;
+export default LogIn;

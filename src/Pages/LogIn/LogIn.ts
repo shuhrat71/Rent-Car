@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 
-export const SignInWrapper = styled.form`
+export const LogInWrapper = styled.form`
   max-width: 500px;
   width: 100%;
   height: 100vh;
@@ -19,13 +19,14 @@ export const InputBox = styled(Box)({
   flexDirection: "column",
   gap: "4px",
 });
-
 export const CreateAcc = styled.div`
+  width: 100%;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
   button {
-    padding: 10px 10px;
+    width: 100%;
+    padding: 15px 0;
     margin-bottom: 20px;
     border-radius: 23px;
   }

@@ -13,7 +13,7 @@ type Props = {};
 function Header({}: Props) {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate("/sign-in");
+    navigate("/log-in");
   };
   const navigate2 = useNavigate();
   const handleSignUpClick = () => {
@@ -27,11 +27,11 @@ function Header({}: Props) {
         </LogoWrapper>
 
         <Auth_buttons>
-          <Button variant="contained" onClick={handleButtonClick}>
-            Sign In
-          </Button>
           <Button variant="contained" onClick={handleSignUpClick}>
             Sign up
+          </Button>
+          <Button variant="contained" onClick={handleButtonClick}>
+            Log In
           </Button>
         </Auth_buttons>
       </HeaderWrapper>
