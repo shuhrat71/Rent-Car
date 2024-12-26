@@ -6,12 +6,15 @@ import { Button, Link, TextField, Typography } from "@mui/material";
 import { CreateAcc } from "../LogIn/LogIn";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { ROUTE_PATHS } from "../../routes/paths";
 
 type Props = {};
 
 function SignUp({}: Props) {
-  const [value, setValue] = useState<string>("");
-  const [number, setNumber] = useState<number>();
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [userData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -46,26 +49,21 @@ function SignUp({}: Props) {
       toast.error("Ma'lumot yuborishda xatolik yuz berdi!");
     const notifyDuplicate = () =>
       toast.error("Bu email allaqachon ro'yxatdan o'tgan!");
-
-    if (value.trim() === "") {
+    if (email.trim() === "") {
       notifyError();
       return;
     }
 
-    if (value.trim() === "") {
-      setError("Emailni kiriting!");
-      return;
-    }
-    if (value === "") {
+    if (email === "") {
       setError("Faqat Telefon raqamga ruxsat berilgan!");
       return;
     }
     try {
       const { data: existingUser, error: checkError } = await supabase
         .from("Users")
-        .select("*")
-        .eq("email", value)
-        .single();
+        .insert([
+          { email: email, name: name, password: password, number: number },
+        ]);
 
       if (checkError) {
         console.error("Error checking existing email:", checkError);
@@ -77,21 +75,21 @@ function SignUp({}: Props) {
         console.log("Bu email allaqachon ro'yxatdan o'tgan!");
         notifyDuplicate();
         return;
-      }
-
-      const { data, error: insertError } = await supabase
-        .from("Users")
-        .insert([{ email: value }]);
-
-      if (insertError) {
-        console.error("Error inserting data:", insertError);
-        notifyError();
       } else {
-        console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
+        navigate(ROUTE_PATHS.HOME);
         FetchData();
-        setValue("");
-        navigate("/");
       }
+      // if (insertError) {
+      //   console.error("Error inserting data:", insertError);
+      //   notifyError();
+      // } else {
+      //   console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
+      //   FetchData();
+      //   setEmail("");
+      //   setName("");
+      //   setNumber(0);
+      //   navigate("/");
+      // }
     } catch (err) {
       console.error("Kutilmagan xatolik yuz berdi:", err);
       alert("Kutilmagan xatolik yuz berdi!");
@@ -120,6 +118,20 @@ function SignUp({}: Props) {
             id="outlined-basic"
             label="Name"
             variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            sx={{
+              width: "100%",
+              background: "#FFFFFF",
+            }}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Number"
+            variant="outlined"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
             sx={{
               width: "100%",
               background: "#FFFFFF",
@@ -130,6 +142,8 @@ function SignUp({}: Props) {
             id="outlined-basic"
             label="Email Address"
             variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             sx={{
               width: "100%",
               background: "#FFFFFF",
@@ -140,6 +154,8 @@ function SignUp({}: Props) {
             id="outlined-basic"
             label="Password"
             variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             sx={{
               width: "100%",
               background: "#FFFFFF",

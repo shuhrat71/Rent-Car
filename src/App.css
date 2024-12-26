@@ -20,7 +20,7 @@ body {
   object-fit: cover;
 }
 .content {
-  width: 990px;
+  max-width: 1000px;
   position: absolute;
   top: 5%;
   z-index: 1;
@@ -30,7 +30,7 @@ body {
   border-radius: 8px;
 }
 .content h1 {
-  font-size: 64px;
+  font-size: 44px;
   line-height: 50px;
   font-family: "Figtree", sans-serif;
   font-weight: bold;

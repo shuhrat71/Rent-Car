@@ -19,6 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
+import { ROUTE_PATHS } from "../../routes/paths";
 
 interface Users {
   user: string;
@@ -80,8 +81,6 @@ const LogIn: React.FC<LogInProps> = () => {
   const handleSubmit = async () => {
     const notifyError = () =>
       toast.error("Ma'lumot yuborishda xatolik yuz berdi!");
-    const notifyDuplicate = () =>
-      toast.error("Bu email allaqachon ro'yxatdan o'tgan!");
 
     if (value.trim() === "") {
       notifyError();
@@ -112,7 +111,7 @@ const LogIn: React.FC<LogInProps> = () => {
 
       if (existingUser) {
         console.log("Bu email allaqachon ro'yxatdan o'tgan!");
-        notifyDuplicate();
+        navigate(ROUTE_PATHS.HOME);
         return;
       }
 
