@@ -32,7 +32,7 @@ function SignUp({}: Props) {
         console.error("Error fetching data:");
       } else {
         setData(data || []);
-        localStorage.setItem("carData", JSON.stringify(data));
+        localStorage.setItem("Users", JSON.stringify(data));
       }
     } catch (err) {
       console.error("Unexpected error:", err);
@@ -53,10 +53,12 @@ function SignUp({}: Props) {
       notifyError();
       return;
     }
-
     if (email === "") {
       setError("Faqat Telefon raqamga ruxsat berilgan!");
       return;
+    }
+    if (!email.endsWith("gmail.com")) {
+      setError("Faqat Gmail manzillariga ruxsat berilgan!");
     }
     try {
       const { data: existingUser, error: checkError } = await supabase
@@ -79,17 +81,6 @@ function SignUp({}: Props) {
         navigate(ROUTE_PATHS.HOME);
         FetchData();
       }
-      // if (insertError) {
-      //   console.error("Error inserting data:", insertError);
-      //   notifyError();
-      // } else {
-      //   console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
-      //   FetchData();
-      //   setEmail("");
-      //   setName("");
-      //   setNumber(0);
-      //   navigate("/");
-      // }
     } catch (err) {
       console.error("Kutilmagan xatolik yuz berdi:", err);
       alert("Kutilmagan xatolik yuz berdi!");
@@ -143,6 +134,8 @@ function SignUp({}: Props) {
             label="Email Address"
             variant="outlined"
             value={email}
+            error={!!error}
+            helperText={error}
             onChange={(e) => setEmail(e.target.value)}
             sx={{
               width: "100%",

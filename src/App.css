@@ -22,7 +22,7 @@ body {
 .content {
   max-width: 1000px;
   position: absolute;
-  top: 5%;
+  top: 2%;
   z-index: 1;
   text-align: center;
   color: white;
