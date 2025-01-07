@@ -32,7 +32,7 @@ function SignUp({}: Props) {
         console.error("Error fetching data:");
       } else {
         setData(data || []);
-        localStorage.setItem("Users", JSON.stringify(data));
+        localStorage.setItem("Users)", JSON.stringify(data));
       }
     } catch (err) {
       console.error("Unexpected error:", err);
@@ -59,6 +59,9 @@ function SignUp({}: Props) {
     }
     if (!email.endsWith("gmail.com")) {
       setError("Faqat Gmail manzillariga ruxsat berilgan!");
+    } else {
+      navigate(ROUTE_PATHS.HOME);
+      FetchData();
     }
     try {
       const { data: existingUser, error: checkError } = await supabase
@@ -77,9 +80,6 @@ function SignUp({}: Props) {
         console.log("Bu email allaqachon ro'yxatdan o'tgan!");
         notifyDuplicate();
         return;
-      } else {
-        navigate(ROUTE_PATHS.HOME);
-        FetchData();
       }
     } catch (err) {
       console.error("Kutilmagan xatolik yuz berdi:", err);

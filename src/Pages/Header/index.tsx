@@ -8,16 +8,16 @@ import {
 import rentCarLogo from "../img/rentCarLogo.jpg";
 import { Button, Container, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routes/paths";
 type Props = {};
 
 function Header({}: Props) {
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate("/log-in");
+    navigate(ROUTE_PATHS.LOG_IN);
   };
-  const navigate2 = useNavigate();
   const handleSignUpClick = () => {
-    navigate2("/sign-up");
+    navigate(ROUTE_PATHS.SIGN_UP);
   };
   return (
     <Container maxWidth="xl">

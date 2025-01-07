@@ -7,7 +7,6 @@ export const Selectors__wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
   gap: 20px;
   input {
     width: 200px;

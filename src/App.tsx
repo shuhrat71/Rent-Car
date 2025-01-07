@@ -8,7 +8,7 @@ import CardDetail from "./Pages/Rented/inxdex";
 import LogIn from "./Pages/LogIn";
 
 function App() {
-  const token = "gdfs";
+  const token = "j";
 
   if (token) {
     return (

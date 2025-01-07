@@ -44,9 +44,6 @@ export default function MultiActionAreaCard() {
       </Box>
     );
   }
-  if (loading) {
-    return CircularIndeterminate();
-  }
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase.from("car data").select("*");
@@ -61,6 +58,9 @@ export default function MultiActionAreaCard() {
 
     fetchData();
   }, []);
+  if (loading) {
+    return CircularIndeterminate();
+  }
 
   return (
     <Container maxWidth="xl">
@@ -77,6 +77,7 @@ export default function MultiActionAreaCard() {
               <Box
                 sx={{
                   maxWidth: 400,
+                  backgroundColor: "red",
                   border: "1px solid red",
                 }}
                 key={item.id}
@@ -93,7 +94,7 @@ export default function MultiActionAreaCard() {
                   </Typography>
                   <Box
                     sx={{
-                      width: "375px",
+                      maxWidth: "375px",
                       height: "100px",
                       display: "flex",
                       justifyContent: "center",
