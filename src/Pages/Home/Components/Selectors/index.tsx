@@ -30,6 +30,7 @@ import user from "./img/user.svg";
 import gasStation from "./img/gasStation.svg";
 import { createClient } from "@supabase/supabase-js";
 import NotFound from "../../../../components/NotFound";
+import { keyframes } from "@mui/system";
 
 interface Cars {
   id: any;
@@ -39,6 +40,16 @@ interface Cars {
   textcar: string;
   chevrolet_Logo: string;
 }
+
+const borderAnimation = keyframes`
+  from {
+    border-image-source: linear-gradient(0deg, #ff2000, #00ff00, #0000ff, #ff0000);
+  }
+  to {
+    border-image-source: linear-gradient(360deg, #ff0000, #00ff00, #0000ff, #ff0000);
+  }
+`;
+
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
@@ -168,7 +179,7 @@ const Filter: React.FC = () => {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "center",
+          justifyContent: "space-evenly",
           gap: "20px",
         }}
       >
@@ -176,9 +187,15 @@ const Filter: React.FC = () => {
           getData.map((item: any) => (
             <Box
               sx={{
-                maxWidth: 400,
+                maxWidth: 700,
+                border: "4px solid black",
+                marginBottom: "70px",
                 borderRadius: "10px",
                 transition: "0.3s",
+                borderImageSlice: 1,
+                borderImageSource:
+                  "linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000)",
+                animation: `${borderAnimation} 1s infinite`,
                 "&:hover": {
                   boxShadow: 3,
                   transform: "scale(1.1)",
@@ -191,6 +208,10 @@ const Filter: React.FC = () => {
                 height="190"
                 image={item.img}
                 alt={item.url}
+                sx={{
+                  borderRadius: "10px",
+                  width: "100%",
+                }}
               />
               <CardContent>
                 <CarName>

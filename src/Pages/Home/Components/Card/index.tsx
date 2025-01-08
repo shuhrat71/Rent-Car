@@ -66,6 +66,9 @@ export default function MultiActionAreaCard() {
     <Container maxWidth="xl">
       <div
         style={{
+          maxWidth: "1200px",
+          width: "100%",
+          background: "red",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
@@ -77,7 +80,6 @@ export default function MultiActionAreaCard() {
               <Box
                 sx={{
                   maxWidth: 400,
-                  backgroundColor: "red",
                   border: "1px solid red",
                 }}
                 key={item.id}

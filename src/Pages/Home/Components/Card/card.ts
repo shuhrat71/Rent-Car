@@ -6,6 +6,7 @@ export const RentBtn = styled.div`
   justify-content: center;
   background-color: #fff;
   border-radius: 15px;
+  margin-bottom: 15px;
   button {
     width: 100%;
     color: #000;
