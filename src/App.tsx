@@ -8,7 +8,7 @@ import CardDetail from "./Pages/Rented/inxdex";
 import LogIn from "./Pages/LogIn";
 
 function App() {
-  const token = "j";
+  const token = "k";
 
   if (token) {
     return (

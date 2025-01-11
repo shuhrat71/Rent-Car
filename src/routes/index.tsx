@@ -1,4 +1,3 @@
-import AdminPanel from "../Pages/Admin";
 import Home from "../Pages/Home";
 import CardDetail from "../Pages/Rented/inxdex";
 import Rented from "../Pages/Rented/inxdex";
@@ -45,9 +44,5 @@ export const PUBLIC_ROUTES: IRoute[] = [
   {
     path: "/card-detial",
     component: <CardDetail />,
-  },
-  {
-    path: "/admin",
-    component: <AdminPanel />,
   },
 ];

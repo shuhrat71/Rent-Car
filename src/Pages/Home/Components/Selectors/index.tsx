@@ -41,15 +41,6 @@ interface Cars {
   chevrolet_Logo: string;
 }
 
-const borderAnimation = keyframes`
-  from {
-    border-image-source: linear-gradient(0deg, #ff2000, #00ff00, #0000ff, #ff0000);
-  }
-  to {
-    border-image-source: linear-gradient(360deg, #ff0000, #00ff00, #0000ff, #ff0000);
-  }
-`;
-
 const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
@@ -188,14 +179,12 @@ const Filter: React.FC = () => {
             <Box
               sx={{
                 maxWidth: 700,
-                border: "4px solid black",
+                border: "1px solid black",
                 marginBottom: "70px",
                 borderRadius: "10px",
                 transition: "0.3s",
                 borderImageSlice: 1,
-                borderImageSource:
-                  "linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000)",
-                animation: `${borderAnimation} 1s infinite`,
+
                 "&:hover": {
                   boxShadow: 3,
                   transform: "scale(1.1)",
