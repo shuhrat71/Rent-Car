@@ -22,9 +22,9 @@ function Header({}: Props) {
   return (
     <Container maxWidth="xl">
       <HeaderWrapper>
-        {/* <LogoWrapper>
+        <LogoWrapper>
           <img src={rentCarLogo} alt="" />
-        </LogoWrapper> */}
+        </LogoWrapper>
 
         <Auth_buttons>
           <Button variant="contained" onClick={handleSignUpClick}>

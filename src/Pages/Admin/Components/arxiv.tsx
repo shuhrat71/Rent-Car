@@ -2,22 +2,22 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Typography, Box, Container } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
-import { CarDetail } from "../Home/Components/Card/card";
+import { CarDetail } from "../../Home/Components/Card/card";
 import CardContent from "@mui/material/CardContent";
-import speedometr from "../Home/Components/Selectors/img/speedometer.svg";
-import gearbox from "../Home/Components/Selectors/img/gearbox.svg";
-import user from "../Home/Components/Selectors/img/user.svg";
-import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
+import speedometr from "../../Home/Components/Selectors/img/speedometer.svg";
+import gearbox from "../../Home/Components/Selectors/img/gearbox.svg";
+import user from "../../Home/Components/Selectors/img/user.svg";
+import gasStation from "../../Home/Components/Selectors/img/gasStation.svg";
 import CircularProgress from "@mui/material/CircularProgress";
-import { RentedCar_Wrapper } from ".";
-import Header from "../Header";
+import { CarInfo, RentedCar_Wrapper } from "../../Rented";
+import Header from "../../Header";
 import { createClient } from "@supabase/supabase-js";
 
 type CardDetailParams = {
   id: string;
 };
 interface Cars {
-  id: string;
+  id: number;
   name: string;
   img: string;
   number: number;
@@ -26,11 +26,8 @@ interface Cars {
   gearbox: string;
   chevrolet_Logo: string;
 }
-const CardDetail: React.FC = () => {
-  const { id } = useParams();
-  console.log(id);
-
-  // const id = 18;
+const CardDetailARX: React.FC = () => {
+  const { id } = useParams<CardDetailParams>();
   const [card, setCard] = useState<Cars>();
   const [loading, setLoading] = useState(true);
 
@@ -126,7 +123,7 @@ const CardDetail: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 aligncards: "center",
-                background: "#F6F6F6",
+
                 borderRadius: "16px",
                 mt: 2,
               }}
@@ -152,9 +149,12 @@ const CardDetail: React.FC = () => {
             </Box>
           </CardContent>
         </Box>
+        <CarInfo>
+          <Typography>jsdbjcv</Typography>
+        </CarInfo>
       </RentedCar_Wrapper>
     </Container>
   );
 };
 
-export default CardDetail;
+export default CardDetailARX;

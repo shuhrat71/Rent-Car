@@ -5,6 +5,7 @@ import { IRoute, PRIVATE_ROUTES } from "./routes";
 import Rented from "./Pages/Rented/inxdex";
 import SignUp from "./Pages/SignUp";
 import CardDetail from "./Pages/Rented/inxdex";
+import VerticalTabs from "Pages/Admin";
 import LogIn from "./Pages/LogIn";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/rented" element={<Rented />} />
         <Route path="/card/:id" element={<CardDetail />} />
+        <Route path="/archive" element={<VerticalTabs />} />
       </Routes>
     );
   }
