@@ -23,6 +23,7 @@ import gearbox from "Pages/Home/Components/Selectors/img/gearbox.svg";
 import user from "Pages/Home/Components/Selectors/img/user.svg";
 import gasStation from "Pages/Home/Components/Selectors/img/gasStation.svg";
 import { RentBtn } from "Pages/Home/Components/Card/card";
+import AddCard from "./Components/addCar";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,7 +75,7 @@ export default function VerticalTabs() {
     } else {
       setData(data || []);
     }
-    localStorage.setItem("carData", JSON.stringify(data));
+    localStorage.setItem("car data", JSON.stringify(data));
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -102,9 +103,8 @@ export default function VerticalTabs() {
       >
         <Tab label="Foydalanuvchilar" {...a11yProps(0)} />
         <Tab label="Ijaraga olinganlar" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        {/* <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
+        <Tab label="Mashina qo'shish" {...a11yProps(2)} />
+        {/* <Tab label="Item Five" {...a11yProps(4)} />
         <Tab label="Item Six" {...a11yProps(5)} />
         <Tab label="Item Seven" {...a11yProps(6)} /> */}
       </Tabs>
@@ -193,7 +193,7 @@ export default function VerticalTabs() {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container>
-          <CardDetailARX />
+          <AddCard />
         </Container>
       </TabPanel>
     </ContainerTap>
