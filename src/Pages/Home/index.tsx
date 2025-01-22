@@ -56,9 +56,9 @@ function Home({}: Props) {
               <JourneyStepsTitle></JourneyStepsTitle>
             </JourneyStepsCards>
           </JourneyStepsWrapper>
-          {/* <Process_img>
+          <Process_img>
             <img src={jeep} alt="" />
-          </Process_img> */}
+          </Process_img>
         </Rental_Process>
       </Container>
     </>

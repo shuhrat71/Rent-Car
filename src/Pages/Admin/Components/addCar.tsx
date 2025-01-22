@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { createClient } from "@supabase/supabase-js";
+import { IsAvaiable__box } from "../../Home/Components/Selectors/select";
 
 const AddCard: React.FC = () => {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ const AddCard: React.FC = () => {
   const [tachometer, setTachometer] = useState("");
   const [textcar, setTextcar] = useState("");
   const [img, setImg] = useState("");
+  const [IsAvaiable, setIsAviable] = useState<Boolean>(true || false);
   const [loading, setLoading] = useState(false);
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
@@ -25,23 +27,30 @@ const AddCard: React.FC = () => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const handleAddCard = async () => {
-    if (!name || !textcar || !img || !gearbox || !tachometer || !number) {
-      alert("Barcha maydonlarni to‘ldiring!");
+    if (
+      !name ||
+      !textcar ||
+      !img ||
+      !gearbox ||
+      !tachometer ||
+      number === "" ||
+      IsAvaiable === null
+    ) {
+      toast.error("Barcha maydonlarni to‘ldiring!");
       return;
     } else if (
-      !img.includes("https://") ||
+      !img.startsWith("https://") ||
       !img.endsWith(".jpg") ||
       !img.endsWith(".png")
     ) {
       const notifyError = () => {
-        toast.success("Ma'lumot yuborishda xatolik yuz berdi!");
+        toast.success("Muvofiqiyatli bajarildi!");
       };
 
       setLoading(true);
 
-      // Supabase'ga yangi karta qo‘shish
       const { data, error } = await supabase
-        .from("car data") // 'cards' jadval nomi
+        .from("car data")
         .insert([{ name, textcar, img, gearbox }]);
       console.log(data);
 
@@ -49,9 +58,9 @@ const AddCard: React.FC = () => {
 
       if (error) {
         console.error("Karta qo‘shishda xato:", error.message);
-        alert("Xatolik yuz berdi!");
+        toast.error("Xatolik yuz berdi!");
       } else {
-        alert("Karta muvaffaqiyatli qo‘shildi!");
+        toast.success("Karta muvaffaqiyatli qo‘shildi!");
         setName("");
         setTextcar("");
         notifyError();
@@ -79,6 +88,7 @@ const AddCard: React.FC = () => {
           justifyContent: "center",
         }}
       >
+        <ToastContainer />
         <Typography variant="h5" component="h2" gutterBottom align="center">
           Karta qo‘shish
         </Typography>
@@ -133,10 +143,10 @@ const AddCard: React.FC = () => {
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Odam soni"
+            label="O'rindiqlar soni"
             variant="outlined"
             fullWidth
-            value={img}
+            value={number}
             onChange={(e) => setNumber(e.target.value)}
             sx={{ mb: 2 }}
           />

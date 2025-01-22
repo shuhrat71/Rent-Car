@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Container, Box } from "@mui/material";
 import Header from "../../Header";
+import { red } from "@mui/material/colors";
 
 const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
 const supabaseKey =
@@ -51,7 +52,7 @@ export default function UserList() {
         </Box>
       ) : (
         <DataGrid
-          sx={{
+          sx={{ 
             maxWidth: "1300px",
             width: "100%",
             height: "80vh",

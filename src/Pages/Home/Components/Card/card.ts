@@ -6,7 +6,6 @@ export const RentBtn = styled.div`
   justify-content: center;
   background-color: #fff;
   border-radius: 15px;
-  margin-bottom: 15px;
   button {
     width: 100%;
     color: #000;
@@ -14,6 +13,7 @@ export const RentBtn = styled.div`
     font-weight: 800;
     font-size: 17px;
     border: 1px solid #000;
+    margin-bottom: 20px;
   }
   button:hover {
     color: #fff;

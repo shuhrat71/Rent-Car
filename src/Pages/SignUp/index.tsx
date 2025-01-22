@@ -15,8 +15,6 @@ function SignUp({}: Props) {
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [number, setNumber] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [userData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
@@ -24,14 +22,15 @@ function SignUp({}: Props) {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  const navigate = useNavigate();
+
   const FetchData = async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase.from("Users").select("*");
       if (error) {
-        console.error("Error fetching data:");
+        console.error("Error fetching data:", error);
       } else {
-        setData(data || []);
         localStorage.setItem("carData", JSON.stringify(data));
       }
     } catch (err) {
@@ -40,62 +39,64 @@ function SignUp({}: Props) {
       setLoading(false);
     }
   };
-  const navigate = useNavigate();
+
   useEffect(() => {
     FetchData();
   }, []);
+
   const handleSubmit = async () => {
-    const notifyError = () =>
-      toast.error("Ma'lumot yuborishda xatolik yuz berdi!");
-    const notifyDuplicate = () =>
-      toast.error("Bu email allaqachon ro'yxatdan o'tgan!");
-    if (email.trim() === "") {
-      notifyError();
+    const notifyError = (msg: string) => toast.error(msg);
+    const notifySuccess = (msg: string) => toast.success(msg);
+
+    // Inputlar bo'shligini tekshirish
+    if (!name.trim() || !email.trim() || !password.trim() || !number.trim()) {
+      notifyError("Iltimos, barcha maydonlarni to'ldiring!");
       return;
     }
 
-    if (email === "") {
-      setError("Faqat Telefon raqamga ruxsat berilgan!");
-      return;
-    }
+    // Email duplikatini tekshirish
     try {
-      const { data: existingUser, error: checkError } = await supabase
+      const { data: existingUsers, error: fetchError } = await supabase
         .from("Users")
-        .insert([
-          { email: email, name: name, password: password, number: number },
-        ]);
+        .select("email")
+        .eq("email", email);
 
-      if (checkError) {
-        console.error("Error checking existing email:", checkError);
-        notifyError();
+      if (fetchError) {
+        console.error("Error checking existing email:", fetchError);
+        notifyError("Ma'lumotlarni tekshirishda xatolik yuz berdi!");
         return;
       }
 
-      if (existingUser) {
-        console.log("Bu email allaqachon ro'yxatdan o'tgan!");
-        notifyDuplicate();
+      if (existingUsers && existingUsers.length > 0) {
+        notifyError("Bu email allaqachon ro'yxatdan o'tgan!");
         return;
-      } else {
-        navigate(ROUTE_PATHS.HOME);
-        FetchData();
       }
-      // if (insertError) {
-      //   console.error("Error inserting data:", insertError);
-      //   notifyError();
-      // } else {
-      //   console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
-      //   FetchData();
-      //   setEmail("");
-      //   setName("");
-      //   setNumber(0);
-      //   navigate("/");
-      // }
+
+      // Foydalanuvchini qo'shish
+      const { data: newUser, error: insertError } = await supabase
+        .from("Users")
+        .insert([{ email, name, password, number }]);
+
+      if (insertError) {
+        console.error("Error inserting data:", insertError);
+        notifyError("Foydalanuvchini qo'shishda xatolik yuz berdi!");
+        return;
+      }
+
+      notifySuccess("Ro'yxatdan muvaffaqiyatli o'tdingiz!");
+      FetchData();
+      navigate(ROUTE_PATHS.HOME);
+
+      // Inputlarni tozalash
+      setEmail("");
+      setName("");
+      setPassword("");
+      setNumber("");
     } catch (err) {
-      console.error("Kutilmagan xatolik yuz berdi:", err);
-      alert("Kutilmagan xatolik yuz berdi!");
+      console.error("Unexpected error:", err);
+      notifyError("Kutilmagan xatolik yuz berdi!");
     }
   };
-
   return (
     <Container
       maxWidth="xs"

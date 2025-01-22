@@ -16,6 +16,7 @@ import {
   Input,
   ButtonElment,
   Location_Btn,
+  IsAvaiable__box,
 } from "./select";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -30,8 +31,8 @@ import user from "./img/user.svg";
 import gasStation from "./img/gasStation.svg";
 import { createClient } from "@supabase/supabase-js";
 import NotFound from "../../../../components/NotFound";
-import { keyframes } from "@mui/system";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 interface Cars {
   id: any;
   name: string;
@@ -39,6 +40,7 @@ interface Cars {
   number: number;
   textcar: string;
   chevrolet_Logo: string;
+  isAvailable: boolean;
 }
 
 const Filter: React.FC = () => {
@@ -59,7 +61,7 @@ const Filter: React.FC = () => {
       setData(data || []);
     }
     setLoading(false);
-    localStorage.setItem("carData", JSON.stringify(data));
+    localStorage.setItem("car data", JSON.stringify(data));
   };
 
   useEffect(() => {
@@ -108,55 +110,6 @@ const Filter: React.FC = () => {
 
   return (
     <Container maxWidth="xl">
-      <SetDataWrapper>
-        <Wrapper>
-          <InputGroup>
-            <Label>Pick-up Location</Label>
-            <Location_Btn>
-              <Button variant="contained">
-                <Icon>
-                  <LocationOnIcon />
-                </Icon>
-                <a href="https://www.google.com/maps/place/Greenleaf+ofis./@40.1545604,67.823834,415m/data=!3m1!1e3!4m6!3m5!1s0x38b297002b54a42b:0xfcceac67ff6d24b2!8m2!3d40.1551728!4d67.8237147!16s%2Fg%2F11w9jk2syt?entry=ttu&g_ep=EgoyMDI0MTIwMi4wIKXMDSoASAFQAw%3D%3D">
-                  Got to Location
-                </a>
-              </Button>
-            </Location_Btn>
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Pick-up date</Label>
-            <InputWrapper>
-              <Icon>
-                <CalendarMonthIcon />
-              </Icon>
-              <Input type="date" defaultValue="2023-12-12" />
-            </InputWrapper>
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Drop-off Location</Label>
-            <InputWrapper>
-              <Icon>
-                <LocationOnIcon />
-              </Icon>
-              <Input type="text" placeholder="Search a location" />
-            </InputWrapper>
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Drop-off date</Label>
-            <InputWrapper>
-              <Icon>
-                <CalendarMonthIcon />
-              </Icon>
-              <Input type="date" defaultValue="2023-12-12" />
-            </InputWrapper>
-          </InputGroup>
-
-          <ButtonElment>Find a Vehicle →</ButtonElment>
-        </Wrapper>
-      </SetDataWrapper>
       <h1
         style={{
           fontSize: "35px",
@@ -180,7 +133,7 @@ const Filter: React.FC = () => {
               sx={{
                 maxWidth: 700,
                 border: "1px solid black",
-                marginBottom: "70px",
+                marginBottom: "50px",
                 borderRadius: "10px",
                 transition: "0.3s",
                 borderImageSlice: 1,
@@ -194,7 +147,7 @@ const Filter: React.FC = () => {
             >
               <CardMedia
                 component="img"
-                height="190"
+                height="200"
                 image={item.img}
                 alt={item.url}
                 sx={{
@@ -207,6 +160,19 @@ const Filter: React.FC = () => {
                   <Typography variant="h1">{item.name}</Typography>
                   <img src={item.chevrolet_Logo} alt="" />
                 </CarName>
+                <IsAvaiable__box>
+                  <Typography color={item.isAvailable ? "green" : "red"}>
+                    {item.isAvailable ? (
+                      <>
+                        <CheckCircleIcon sx={{ marginRight: 1 }} />
+                      </>
+                    ) : (
+                      <>
+                        <CancelIcon sx={{ marginRight: 1 }} />
+                      </>
+                    )}
+                  </Typography>
+                </IsAvaiable__box>
                 <Box
                   sx={{
                     width: "375px",

@@ -37,6 +37,7 @@ export const Input_wrapper = styled.div`
 `;
 export const CarName = styled.div`
   width: 100%;
+  height: 40px;
   padding: 15px 0;
   display: flex;
   justify-content: space-between;
@@ -106,8 +107,6 @@ export const ButtonElment = styled.button`
   font-weight: bold;
   cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: center;
   &:hover {
     background-color: #333;
   }
@@ -125,4 +124,10 @@ export const Location_Btn = styled.div`
     background-color: #fff;
     color: #000;
   }
+`;
+export const IsAvaiable__box = styled.div`
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: block;
 `;

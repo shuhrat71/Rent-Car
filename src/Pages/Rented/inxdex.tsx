@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { Button, Stepper, Step, StepLabel, TextField } from "@mui/material";
 import { Typography, Box, Container } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { CarDetail } from "../Home/Components/Card/card";
@@ -9,13 +10,10 @@ import gearbox from "../Home/Components/Selectors/img/gearbox.svg";
 import user from "../Home/Components/Selectors/img/user.svg";
 import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
 import CircularProgress from "@mui/material/CircularProgress";
-import { RentedCar_Wrapper } from ".";
+import { RentedCar_Wrapper, RentedContend__wrapper, Stepper_Wrapper } from ".";
 import Header from "../Header";
 import { createClient } from "@supabase/supabase-js";
 
-type CardDetailParams = {
-  id: string;
-};
 interface Cars {
   id: string;
   name: string;
@@ -33,6 +31,19 @@ const CardDetail: React.FC = () => {
   // const id = 18;
   const [card, setCard] = useState<Cars>();
   const [loading, setLoading] = useState(true);
+  const [activeStep, setActiveStep] = useState(0);
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [pickupDate, setPickupDate] = useState("");
+  const [dropOffLocation, setDropOffLocation] = useState("");
+  const [dropOffDate, setDropOffDate] = useState("");
+
+  const steps = [
+    "Pick-up Location",
+    "Pick-up Date",
+    "Drop-off Location",
+    "Drop-off Date",
+    "Product",
+  ];
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
   const supabaseKey =
@@ -64,7 +75,20 @@ const CardDetail: React.FC = () => {
       fetchDataById(id);
     }
   }, [id]);
-
+  const insertCarData = async () => {
+    try {
+      const { data, error } = await supabase.from("rentedLists").insert([
+        {
+          pickup_location: pickupLocation,
+          pickUpDate: pickupDate,
+          drop_off_location: dropOffLocation,
+          dropOffDate: dropOffDate,
+        },
+      ]);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
   if (!id || isNaN(Number(id))) {
     return <p>Error: Invalid or missing ID</p>;
   }
@@ -88,71 +112,185 @@ const CardDetail: React.FC = () => {
   if (loading) {
     return CircularIndeterminate();
   }
+
+  const handleNext = () => {
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (activeStep > 0) {
+      setActiveStep((prevStep) => prevStep - 1);
+    }
+  };
+
+  // Formni yuborish (masalan, Supabase'ga yuborish)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await insertCarData();
+
+    // Supabase ga yuborish kodini shu yerga qo'shishingiz mumkin
+  };
+
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Header />
       <h1>Card Detail</h1>
-      <RentedCar_Wrapper>
-        <Box sx={{ maxWidth: 400 }} key={card.id}>
-          <CardMedia
-            component="img"
-            height="190"
-            image={card.img}
-            alt={card.name}
-          />
-          <CardContent>
-            <Typography
-              sx={{
-                fontSize: "27px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItem: "center",
-              }}
-              variant="h1"
-            >
-              {card.name}{" "}
-              <img
-                style={{
-                  width: "70px",
-                }}
-                src={card.chevrolet_Logo}
-                alt=""
-              />
-            </Typography>
-            <Box
-              sx={{
-                width: "375px",
-                height: "100px",
-                display: "flex",
-                justifyContent: "center",
-                aligncards: "center",
-                background: "#F6F6F6",
-                borderRadius: "16px",
-                mt: 2,
-              }}
-            >
-              <CarDetail>
-                <div className="speedometr box">
-                  <img src={speedometr} alt="" />
-                  <p>{card.tachometer}</p>
-                </div>
-                <div className="gearbox box">
-                  <img src={gearbox} alt="" />
-                  <p>{card.gearbox}</p>
-                </div>
-                <div className="person box">
-                  <img src={user} alt="" />
-                  <p>{card.number}</p>
-                </div>
-                <div className="petrol box">
-                  <img src={gasStation} alt="" />
-                  <p>{card.textcar}</p>
-                </div>
-              </CarDetail>
-            </Box>
-          </CardContent>
-        </Box>
-      </RentedCar_Wrapper>
+      <RentedContend__wrapper>
+        <Stepper_Wrapper>
+          <Box>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label, index) => (
+                <Step key={index}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+
+            <form onSubmit={handleSubmit}>
+              {/* Pick-up Location */}
+              {activeStep === 0 && (
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
+                    label="Pick-up Location"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </Box>
+              )}
+
+              {/* Pick-up Date */}
+              {activeStep === 1 && (
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    type="date"
+                    value={pickupDate}
+                    onChange={(e) => setPickupDate(e.target.value)}
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </Box>
+              )}
+
+              {/* Drop-off Location */}
+              {activeStep === 2 && (
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    value={dropOffLocation}
+                    onChange={(e) => setDropOffLocation(e.target.value)}
+                    label="Drop-off Location"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </Box>
+              )}
+
+              {/* Drop-off Date */}
+              {activeStep === 3 && (
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    type="date"
+                    value={dropOffDate}
+                    onChange={(e) => setDropOffDate(e.target.value)}
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </Box>
+              )}
+              {activeStep === 4 && (
+                <RentedCar_Wrapper>
+                  <Box sx={{ maxWidth: 400 }} key={card.id}>
+                    <CardMedia
+                      component="img"
+                      height="190"
+                      image={card.img}
+                      alt={card.name}
+                    />
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: "27px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItem: "center",
+                        }}
+                        variant="h1"
+                      >
+                        {card.name}{" "}
+                        <img
+                          style={{
+                            width: "70px",
+                          }}
+                          src={card.chevrolet_Logo}
+                          alt=""
+                        />
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: "375px",
+                          height: "100px",
+                          display: "flex",
+                          justifyContent: "center",
+                          aligncards: "center",
+                          background: "#F6F6F6",
+                          borderRadius: "16px",
+                          mt: 2,
+                        }}
+                      >
+                        <CarDetail>
+                          <div className="speedometr box">
+                            <img src={speedometr} alt="" />
+                            <p>{card.tachometer}</p>
+                          </div>
+                          <div className="gearbox box">
+                            <img src={gearbox} alt="" />
+                            <p>{card.gearbox}</p>
+                          </div>
+                          <div className="person box">
+                            <img src={user} alt="" />
+                            <p>{card.number}</p>
+                          </div>
+                          <div className="petrol box">
+                            <img src={gasStation} alt="" />
+                            <p>{card.textcar}</p>
+                          </div>
+                        </CarDetail>
+                      </Box>
+                    </CardContent>
+                  </Box>
+                </RentedCar_Wrapper>
+              )}
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              >
+                <Button
+                  onClick={handleBack}
+                  disabled={activeStep === 0}
+                  variant="outlined"
+                >
+                  Back
+                </Button>
+                {activeStep === steps.length - 1 ? (
+                  <Button type="submit" variant="contained">
+                    Submit
+                  </Button>
+                ) : (
+                  <Button onClick={handleNext} variant="contained">
+                    Next
+                  </Button>
+                )}
+              </Box>
+            </form>
+          </Box>
+        </Stepper_Wrapper>
+      </RentedContend__wrapper>
     </Container>
   );
 };

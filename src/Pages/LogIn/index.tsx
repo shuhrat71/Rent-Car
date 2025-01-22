@@ -81,19 +81,12 @@ const LogIn: React.FC<LogInProps> = () => {
   const handleSubmit = async () => {
     const notifyError = () =>
       toast.error("Ma'lumot yuborishda xatolik yuz berdi!");
-
     if (value.trim() === "") {
       notifyError();
-      return;
-    }
-
-    if (value.trim() === "") {
+    } else if (value.trim() === "") {
       setError("Emailni kiriting!");
-      return;
-    }
-    if (!value.endsWith("@gmail.com")) {
+    } else if (!value.endsWith("@gmail.com")) {
       setError("Faqat Gmail manzillariga ruxsat berilgan!");
-      return;
     }
 
     try {
@@ -121,7 +114,6 @@ const LogIn: React.FC<LogInProps> = () => {
 
       if (insertError) {
         console.error("Error inserting data:", insertError);
-        notifyError();
       } else {
         console.log("Email muvaffaqiyatli ro'yxatga olindi:", data);
         FetchData();
@@ -129,8 +121,7 @@ const LogIn: React.FC<LogInProps> = () => {
         navigate("/");
       }
     } catch (err) {
-      console.error("Kutilmagan xatolik yuz berdi:", err);
-      alert("Kutilmagan xatolik yuz berdi!");
+      toast.error("Kutilmagan xatolik yuz berdi!");
     }
   };
 

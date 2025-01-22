@@ -89,13 +89,12 @@ export default function VerticalTabs() {
     <ContainerTap>
       <Tabs
         orientation="vertical"
-        variant="scrollable"
+        variant="fullWidth"
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
         sx={{
           width: "200px",
-          height: "100vh",
           padding: "80px 0 0 ",
           borderRight: 1,
           borderColor: "divider",
