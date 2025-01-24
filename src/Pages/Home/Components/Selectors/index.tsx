@@ -1,38 +1,24 @@
 import React, { useState, useEffect } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Typography, Box } from "@mui/material";
-import { Container } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
-import {
-  CarName,
-  Input_wrapper,
-  Selectors__wrapper,
-  SetDataWrapper,
-  Wrapper,
-  InputGroup,
-  Label,
-  InputWrapper,
-  Icon,
-  Input,
-  ButtonElment,
-  Location_Btn,
-  IsAvaiable__box,
-} from "./select";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import Button from "@mui/material/Button";
-import CardMedia from "@mui/material/CardMedia";
+import AOS from "aos";
+import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-import CardContent from "@mui/material/CardContent";
+import "aos/dist/aos.css";
 import { CarDetail, RentBtn } from "../Card/card";
+import NotFound from "../../../../components/NotFound";
+import { CarName } from "./select";
 import speedometr from "./img/speedometer.svg";
 import gearbox from "./img/gearbox.svg";
-import user from "./img/user.svg";
+import { Container } from "@mui/material";
 import gasStation from "./img/gasStation.svg";
-import { createClient } from "@supabase/supabase-js";
-import NotFound from "../../../../components/NotFound";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+import user from "./img/user.svg";
+
+import { Typography, Box } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+
 interface Cars {
   id: any;
   name: string;
@@ -47,6 +33,18 @@ const Filter: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [ids, setIds] = useState<any>([]);
+
+  useEffect(() => {
+    AOS.init({
+      offset: 200,
+      delay: 50,
+      duration: 1500,
+      easing: "ease-in-out",
+      once: true,
+    });
+  }, []);
+
   const fetchData = async () => {
     const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
     const supabaseKey =
@@ -62,6 +60,9 @@ const Filter: React.FC = () => {
     }
     setLoading(false);
     localStorage.setItem("car data", JSON.stringify(data));
+
+    const res = await supabase.from("rentedLists").select("carId");
+    setIds(res.data);
   };
 
   useEffect(() => {
@@ -99,12 +100,11 @@ const Filter: React.FC = () => {
       setData([]);
     }
   };
-
   const handleCardClick = (id: number) => {
     if (id) {
       navigate(`/card/${id}`);
     } else {
-      navigate("notFound");
+      navigate("/notFound");
     }
   };
 
@@ -154,25 +154,14 @@ const Filter: React.FC = () => {
                   borderRadius: "10px",
                   width: "100%",
                 }}
+                data-aos="fade-up"
+                data-aos-anchor-placement="center-bottom"
               />
               <CardContent>
                 <CarName>
                   <Typography variant="h1">{item.name}</Typography>
                   <img src={item.chevrolet_Logo} alt="" />
                 </CarName>
-                <IsAvaiable__box>
-                  <Typography color={item.isAvailable ? "green" : "red"}>
-                    {item.isAvailable ? (
-                      <>
-                        <CheckCircleIcon sx={{ marginRight: 1 }} />
-                      </>
-                    ) : (
-                      <>
-                        <CancelIcon sx={{ marginRight: 1 }} />
-                      </>
-                    )}
-                  </Typography>
-                </IsAvaiable__box>
                 <Box
                   sx={{
                     width: "375px",
@@ -207,6 +196,7 @@ const Filter: React.FC = () => {
               <RentBtn>
                 <CardActions>
                   <Button
+                    disabled={ids.includes(item.id)}
                     key={item.id}
                     onClick={() => handleCardClick(item.id)}
                     size="small"

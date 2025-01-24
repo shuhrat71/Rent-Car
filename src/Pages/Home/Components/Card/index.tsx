@@ -83,7 +83,14 @@ export default function MultiActionAreaCard() {
                 }}
                 key={item.id}
               >
-                <CardMedia component="img" image={item.img} alt={item.img} />
+                <CardMedia
+                  component="img"
+                  sx={{
+                    padding: "30px 20px",
+                  }}
+                  image={item.img}
+                  alt={item.img}
+                />
                 <CardContent>
                   <Typography>
                     {item.name} <img src={item.chevrolet_Logo} alt="" />

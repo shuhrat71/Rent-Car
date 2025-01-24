@@ -110,7 +110,7 @@ const LogIn: React.FC<LogInProps> = () => {
 
       const { data, error: insertError } = await supabase
         .from("Users")
-        .insert([{ email: value }]);
+        .insert([{ email: value, password: value }]);
 
       if (insertError) {
         console.error("Error inserting data:", insertError);

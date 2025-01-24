@@ -127,7 +127,12 @@ export const Location_Btn = styled.div`
 `;
 export const IsAvaiable__box = styled.div`
   position: absolute;
-  left: 10px;
-  top: 10px;
-  display: block;
+  display: flex;
+  align-items: center;
+  top: 6px;
+  right: 10px;
+  h6 {
+    display: flex;
+    align-items: center;
+  }
 `;

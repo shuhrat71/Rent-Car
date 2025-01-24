@@ -30,5 +30,5 @@ export const Stepper_Wrapper = styled.div`
 export const RentedContend__wrapper = styled.section`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;

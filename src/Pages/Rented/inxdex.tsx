@@ -13,6 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { RentedCar_Wrapper, RentedContend__wrapper, Stepper_Wrapper } from ".";
 import Header from "../Header";
 import { createClient } from "@supabase/supabase-js";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Cars {
   id: string;
@@ -26,9 +27,7 @@ interface Cars {
 }
 const CardDetail: React.FC = () => {
   const { id } = useParams();
-  console.log(id);
 
-  // const id = 18;
   const [card, setCard] = useState<Cars>();
   const [loading, setLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
@@ -77,16 +76,20 @@ const CardDetail: React.FC = () => {
   }, [id]);
   const insertCarData = async () => {
     try {
-      const { data, error } = await supabase.from("rentedLists").insert([
-        {
-          pickup_location: pickupLocation,
-          pickUpDate: pickupDate,
-          drop_off_location: dropOffLocation,
-          dropOffDate: dropOffDate,
-        },
-      ]);
-    } catch (err) {
-      console.error("Unexpected error:", err);
+      const { data, error } = await supabase
+        .from("rentedLists")
+        .insert([
+          {
+            pickup_location: pickupLocation,
+            pickUpDate: pickupDate,
+            drop_off_location: dropOffLocation,
+            dropOffDate: dropOffDate,
+            carId: id,
+          },
+        ])
+        .select();
+    } catch (error) {
+      console.error("Unexpected error:", error);
     }
   };
   if (!id || isNaN(Number(id))) {
@@ -114,7 +117,23 @@ const CardDetail: React.FC = () => {
   }
 
   const handleNext = () => {
-    if (activeStep < steps.length - 1) {
+    if (activeStep === 0 && !pickupLocation) {
+      toast.error("Please enter pick-up location");
+      return;
+    }
+    if (activeStep === 1 && !pickupDate) {
+      toast.error("Please enter pick-up date");
+      return;
+    }
+    if (activeStep === 2 && !dropOffLocation) {
+      toast.error("Please enter drop-off location");
+      return;
+    }
+    if (activeStep === 3 && !dropOffDate) {
+      toast.error("Please enter drop-off date");
+      return;
+    }
+    if (activeStep < steps.length) {
       setActiveStep((prevStep) => prevStep + 1);
     }
   };
@@ -123,14 +142,6 @@ const CardDetail: React.FC = () => {
     if (activeStep > 0) {
       setActiveStep((prevStep) => prevStep - 1);
     }
-  };
-
-  // Formni yuborish (masalan, Supabase'ga yuborish)
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await insertCarData();
-
-    // Supabase ga yuborish kodini shu yerga qo'shishingiz mumkin
   };
 
   return (
@@ -148,8 +159,7 @@ const CardDetail: React.FC = () => {
               ))}
             </Stepper>
 
-            <form onSubmit={handleSubmit}>
-              {/* Pick-up Location */}
+            <form>
               {activeStep === 0 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
@@ -163,7 +173,6 @@ const CardDetail: React.FC = () => {
                 </Box>
               )}
 
-              {/* Pick-up Date */}
               {activeStep === 1 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
@@ -177,7 +186,6 @@ const CardDetail: React.FC = () => {
                 </Box>
               )}
 
-              {/* Drop-off Location */}
               {activeStep === 2 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
@@ -191,7 +199,6 @@ const CardDetail: React.FC = () => {
                 </Box>
               )}
 
-              {/* Drop-off Date */}
               {activeStep === 3 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
@@ -265,6 +272,7 @@ const CardDetail: React.FC = () => {
                       </Box>
                     </CardContent>
                   </Box>
+                  <ToastContainer />
                 </RentedCar_Wrapper>
               )}
               <Box
@@ -278,7 +286,7 @@ const CardDetail: React.FC = () => {
                   Back
                 </Button>
                 {activeStep === steps.length - 1 ? (
-                  <Button type="submit" variant="contained">
+                  <Button onClick={insertCarData} variant="contained">
                     Submit
                   </Button>
                 ) : (
