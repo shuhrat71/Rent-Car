@@ -8,7 +8,7 @@ import NotFound from "../../../../components/NotFound";
 import { CarName } from "./select";
 import speedometr from "./img/speedometer.svg";
 import gearbox from "./img/gearbox.svg";
-import { Container } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import gasStation from "./img/gasStation.svg";
 import user from "./img/user.svg";
 
@@ -18,6 +18,8 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import { toast } from "react-toastify";
+import { ROUTE_PATHS } from "routes/paths";
 
 interface Cars {
   id: any;
@@ -28,12 +30,20 @@ interface Cars {
   chevrolet_Logo: string;
   isAvailable: boolean;
 }
-
+interface RentedCar {
+  carId: any;
+  pickUpDate: string;
+  dropOffDate: string;
+  pickup_location: string;
+}
 const Filter: React.FC = () => {
-  const [search, setSearch] = useState<string>("");
+  // const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
-  const [ids, setIds] = useState<any>([]);
+  const [rentedCars, setRentedCars] = useState<RentedCar[]>([]);
+  const [ids, setId] = useState<number[]>([]); // Rented car IDs
+  const [carsInfo, setCarsInfo] = useState<Cars[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({
@@ -43,6 +53,9 @@ const Filter: React.FC = () => {
       easing: "ease-in-out",
       once: true,
     });
+
+    fetchData();
+    fetchRentedCars();
   }, []);
 
   const fetchData = async () => {
@@ -51,25 +64,47 @@ const Filter: React.FC = () => {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
 
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const { data, error } = await supabase.from("car data").select("*");
-    console.log(data);
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setData(data || []);
-    }
-    setLoading(false);
-    localStorage.setItem("car data", JSON.stringify(data));
 
-    const res = await supabase.from("rentedLists").select("carId");
-    setIds(res.data);
+    try {
+      const { data: cars, error: carsError } = await supabase
+        .from("car data")
+        .select("*");
+
+      if (carsError) throw carsError;
+      setData(cars || []);
+
+      const { data: rented, error: rentedError } = await supabase
+        .from("rentedLists")
+        .select("*");
+      console.log(rented);
+      setCarsInfo(rented || []);
+
+      if (rentedError) throw rentedError;
+
+      setRentedCars(rented || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  const navigate = useNavigate();
+  const fetchRentedCars = async () => {
+    const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
 
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    try {
+      const { data, error } = await supabase.from("rentedLists").select("*");
+
+      if (error) throw error;
+
+      setRentedCars(data as RentedCar[]); // Set rented cars
+    } catch (err) {
+      console.error("Error fetching rented cars:", err);
+    }
+  };
   function CircularIndeterminate() {
     return (
       <Box
@@ -84,22 +119,10 @@ const Filter: React.FC = () => {
       </Box>
     );
   }
+
   if (loading) {
     return CircularIndeterminate();
   }
-
-  const handleSearch = (value: string, type: string) => {
-    if (value) {
-      const searchResult = getData.filter((item: any) => {
-        console.log("item type:", item[type]);
-        return item[type]?.toLowerCase().includes(value.toLowerCase());
-      });
-      setData(searchResult);
-      localStorage.setItem("searchData", JSON.stringify(searchResult));
-    } else {
-      setData([]);
-    }
-  };
   const handleCardClick = (id: number) => {
     if (id) {
       navigate(`/card/${id}`);
@@ -195,15 +218,65 @@ const Filter: React.FC = () => {
               </CardContent>
               <RentBtn>
                 <CardActions>
-                  <Button
-                    disabled={ids.includes(item.id)}
-                    key={item.id}
-                    onClick={() => handleCardClick(item.id)}
-                    size="small"
-                    color="primary"
-                  >
-                    Ijaraga Olish
-                  </Button>
+                  {rentedCars.some(
+                    (rentedItem) =>
+                      rentedItem.carId === item.id &&
+                      new Date(rentedItem.dropOffDate) > new Date()
+                  ) ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "10px",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          padding: "10px",
+                          background: "#f27573",
+                          borderRadius: "8px",
+                          color: "#fff",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Olib ketilgan sanasi:{" "}
+                        {
+                          rentedCars.find(
+                            (rentedItem) => rentedItem.carId === item.id
+                          )?.pickUpDate
+                        }
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          padding: "10px",
+                          background: "#84c887",
+                          borderRadius: "8px",
+                          color: "#fff",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Qaytarish sanasi:{" "}
+                        {
+                          rentedCars.find(
+                            (rentedItem) => rentedItem.carId === item.id
+                          )?.dropOffDate
+                        }
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Button
+                      onClick={() => handleCardClick(item.id)}
+                      size="small"
+                      color="primary"
+                    >
+                      Ijaraga olish
+                    </Button>
+                  )}
                 </CardActions>
               </RentBtn>
             </Box>

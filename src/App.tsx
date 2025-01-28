@@ -20,7 +20,7 @@ function App() {
         <Route path="/notFound" element={<NotFound />} />
         <Route path="/log-in" element={<LogIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/rented" element={<Rented />} />
+        <Route path="/rented:id" element={<Rented />} />
         <Route path="/card/:id" element={<CardDetail />} />
         <Route path="/archive" element={<VerticalTabs />} />
       </Routes>

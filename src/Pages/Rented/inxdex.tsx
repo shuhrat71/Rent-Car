@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Button, Stepper, Step, StepLabel, TextField } from "@mui/material";
 import { Typography, Box, Container } from "@mui/material";
@@ -14,9 +14,10 @@ import { RentedCar_Wrapper, RentedContend__wrapper, Stepper_Wrapper } from ".";
 import Header from "../Header";
 import { createClient } from "@supabase/supabase-js";
 import { toast, ToastContainer } from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ROUTE_PATHS } from "routes/paths";
 interface Cars {
-  id: string;
+  id: number;
   name: string;
   img: string;
   number: number;
@@ -32,10 +33,10 @@ const CardDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const [pickupLocation, setPickupLocation] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
+  const [pickUpDate, setPickupDate] = useState("");
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
-
+  const navigate = useNavigate();
   const steps = [
     "Pick-up Location",
     "Pick-up Date",
@@ -65,7 +66,7 @@ const CardDetail: React.FC = () => {
         setCard(data);
         setTimeout(() => {
           setLoading(false);
-        }, 2000);
+        }, 1000);
       } catch (err) {
         console.error("Unexpected error:", err);
       }
@@ -76,20 +77,25 @@ const CardDetail: React.FC = () => {
   }, [id]);
   const insertCarData = async () => {
     try {
-      const { data, error } = await supabase
-        .from("rentedLists")
-        .insert([
-          {
-            pickup_location: pickupLocation,
-            pickUpDate: pickupDate,
-            drop_off_location: dropOffLocation,
-            dropOffDate: dropOffDate,
-            carId: id,
-          },
-        ])
-        .select();
+      const { data, error } = await supabase.from("rentedLists").insert([
+        {
+          carId: id,
+          pickUpDate,
+          dropOffDate,
+          pickup_location: pickupLocation,
+          drop_off_location: dropOffLocation,
+        },
+      ]);
+      console.log("data", data);
+
+      if (error) throw error;
+
+      // Muvaffaqiyatli bo'lsa, Home sahifasiga qaytadi
+      navigate(ROUTE_PATHS.HOME);
     } catch (error) {
-      console.error("Unexpected error:", error);
+      console.error("Error submitting rent data:", error);
+    } finally {
+      setLoading(false);
     }
   };
   if (!id || isNaN(Number(id))) {
@@ -121,7 +127,7 @@ const CardDetail: React.FC = () => {
       toast.error("Please enter pick-up location");
       return;
     }
-    if (activeStep === 1 && !pickupDate) {
+    if (activeStep === 1 && !pickUpDate) {
       toast.error("Please enter pick-up date");
       return;
     }
@@ -177,7 +183,7 @@ const CardDetail: React.FC = () => {
                 <Box sx={{ mt: 2 }}>
                   <TextField
                     type="date"
-                    value={pickupDate}
+                    value={pickUpDate}
                     onChange={(e) => setPickupDate(e.target.value)}
                     fullWidth
                     variant="outlined"
