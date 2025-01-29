@@ -6,6 +6,7 @@ import { Container, Typography } from "@mui/material";
 import {
   JourneyStepsCards,
   JourneyStepsIcon,
+  JourneyStepsText,
   JourneyStepsTitle,
   JourneyStepsWrapper,
   Process_img,
@@ -16,6 +17,7 @@ import jeep from "./Components/Selectors/img/jeep.png";
 import SearchIcon from "@mui/icons-material/Search";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import Footer from "../../Pages/Home";
 type Props = {};
 
 function Home({}: Props) {
@@ -41,19 +43,50 @@ function Home({}: Props) {
               <JourneyStepsIcon>
                 <SearchIcon />
               </JourneyStepsIcon>
-              <JourneyStepsTitle></JourneyStepsTitle>
+              <JourneyStepsTitle>
+                <Typography variant="h1">Ko'rib chiqing va tanlang</Typography>
+                <JourneyStepsText>
+                  <Typography variant="body1">
+                    Bizning keng assortimentdagi premium avtomobillarimizdan
+                    tanlang, olib ketish va qaytarish sanalari va o'zingizga mos
+                    keladigan joylarni tanlang.
+                  </Typography>
+                </JourneyStepsText>
+              </JourneyStepsTitle>
             </JourneyStepsCards>
             <JourneyStepsCards>
               <JourneyStepsIcon>
                 <EventAvailableIcon />
               </JourneyStepsIcon>
-              <JourneyStepsTitle></JourneyStepsTitle>
+              <JourneyStepsTitle>
+                <Typography variant="h1">
+                  Buyurtma qiling va tasdiqlang
+                </Typography>
+                <JourneyStepsText>
+                  <Typography variant="body1">
+                    Bir necha marta bosish orqali kerakli mashinangizni bron
+                    qiling va elektron pochta yoki SMS orqali darhol tasdiqlov
+                    oling.
+                  </Typography>
+                </JourneyStepsText>
+              </JourneyStepsTitle>
             </JourneyStepsCards>
             <JourneyStepsCards>
               <JourneyStepsIcon>
                 <InsertEmoticonIcon />
               </JourneyStepsIcon>
-              <JourneyStepsTitle></JourneyStepsTitle>
+              <JourneyStepsTitle>
+                <Typography variant="h1">
+                  Haydashingizdan rohatlaning
+                </Typography>
+                <JourneyStepsText>
+                  <Typography variant="body1">
+                    Mashinangizni belgilangan joyda olib boring va bizning
+                    yuqori sifatli xizmatimiz bilan yuqori darajadagi haydash
+                    tajribangizdan bahramand bo'ling.
+                  </Typography>
+                </JourneyStepsText>
+              </JourneyStepsTitle>
             </JourneyStepsCards>
           </JourneyStepsWrapper>
           <Process_img>
@@ -61,6 +94,7 @@ function Home({}: Props) {
           </Process_img>
         </Rental_Process>
       </Container>
+      <Footer />
     </>
   );
 }
