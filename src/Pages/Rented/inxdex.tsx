@@ -16,6 +16,7 @@ import { createClient } from "@supabase/supabase-js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ROUTE_PATHS } from "routes/paths";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 interface Cars {
   id: number;
   name: string;
@@ -26,6 +27,17 @@ interface Cars {
   gearbox: string;
   chevrolet_Logo: string;
 }
+
+const containerStyle = {
+  width: "100%",
+  height: "400px",
+};
+
+const defaultLocation = {
+  lat: 40.7128, // O'zingiz belgilash kerak bo'lgan default latitude
+  lng: -74.006, // O'zingiz belgilash kerak bo'lgan default longitude
+};
+
 const CardDetail: React.FC = () => {
   const { id } = useParams();
 
@@ -37,6 +49,7 @@ const CardDetail: React.FC = () => {
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
   const navigate = useNavigate();
+  const [location, setLocation] = useState(defaultLocation);
   const steps = [
     "Pick-up Location",
     "Pick-up Date",

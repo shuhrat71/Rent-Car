@@ -17,7 +17,7 @@ import jeep from "./Components/Selectors/img/jeep.png";
 import SearchIcon from "@mui/icons-material/Search";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
-import Footer from "../../Pages/Home";
+// import Footer from "../../Pages/Home";
 type Props = {};
 
 function Home({}: Props) {
@@ -94,7 +94,7 @@ function Home({}: Props) {
           </Process_img>
         </Rental_Process>
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

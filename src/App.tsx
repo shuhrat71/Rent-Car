@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import NotFound from "./components/NotFound";
 import { IRoute, PRIVATE_ROUTES } from "./routes";
@@ -7,31 +7,99 @@ import SignUp from "./Pages/SignUp";
 import CardDetail from "./Pages/Rented/inxdex";
 import VerticalTabs from "Pages/Admin";
 import LogIn from "./Pages/LogIn";
+import { FC } from "react";
+
+const MotionWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className="motion-wrapper-enter">{children}</div>;
+};
 
 function App() {
-  const token = "k";
-
-  if (token) {
-    return (
-      <Routes>
-        {PRIVATE_ROUTES.map(({ component, path }: IRoute) => (
-          <Route element={component} path={path} />
-        ))}
-        <Route path="/notFound" element={<NotFound />} />
-        <Route path="/log-in" element={<LogIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/rented:id" element={<Rented />} />
-        <Route path="/card/:id" element={<CardDetail />} />
-        <Route path="/archive" element={<VerticalTabs />} />
-      </Routes>
-    );
-  }
+  const location = useLocation();
+  const token = "k"; // Tokenni tekshirish uchun
 
   return (
-    <Routes>
-      <Route path="/log-in" element={<LogIn />} />
-      <Route path="/sign-up" element={<SignUp />} />
-    </Routes>
+    <div className="app">
+      <Routes location={location} key={location.pathname}>
+        {token ? (
+          <>
+            {PRIVATE_ROUTES.map(({ component, path }: any) => (
+              <Route
+                key={path}
+                path={path}
+                element={<MotionWrapper>{component}</MotionWrapper>}
+              />
+            ))}
+            <Route
+              path="/notFound"
+              element={
+                <MotionWrapper>
+                  <NotFound />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/log-in"
+              element={
+                <MotionWrapper>
+                  <LogIn />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/sign-up"
+              element={
+                <MotionWrapper>
+                  <SignUp />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/rented:id"
+              element={
+                <MotionWrapper>
+                  <Rented />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/card/:id"
+              element={
+                <MotionWrapper>
+                  <CardDetail />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/archive"
+              element={
+                <MotionWrapper>
+                  <VerticalTabs />
+                </MotionWrapper>
+              }
+            />
+          </>
+        ) : (
+          <>
+            <Route
+              path="/log-in"
+              element={
+                <MotionWrapper>
+                  <LogIn />
+                </MotionWrapper>
+              }
+            />
+            <Route
+              path="/sign-up"
+              element={
+                <MotionWrapper>
+                  <SignUp />
+                </MotionWrapper>
+              }
+            />
+          </>
+        )}
+      </Routes>
+    </div>
   );
 }
 

@@ -4,6 +4,7 @@
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 .background-container {
   position: relative;
@@ -35,4 +36,36 @@ body {
   font-family: "Figtree", sans-serif;
   font-weight: bold;
   line-height: 120%;
+}
+/* Aniqlangan animatsiya */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    background-color: red;
+    transform: translateX(49px);
+  }
+}
+
+/* CSS sinflari */
+.motion-wrapper-enter {
+  animation: fadeIn 0.5s alternate;
+}
+
+.motion-wrapper-exit {
+  animation: fadeOut 0.5 alternate;
 }
