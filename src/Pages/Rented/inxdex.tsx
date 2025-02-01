@@ -306,7 +306,7 @@ const CardDetail: React.FC = () => {
                 </Button>
                 {activeStep === steps.length - 1 ? (
                   <Button onClick={insertCarData} variant="contained">
-                    Submit
+                    Rasmiylashtirish
                   </Button>
                 ) : (
                   <Button onClick={handleNext} variant="contained">
