@@ -15,3 +15,12 @@ export const UserAvatar = styled.div`
   margin-bottom: 20px;
   padding: 20px;
 `;
+export const Form__wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  input {
+    width: 300px;
+  }
+`;

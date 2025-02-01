@@ -9,8 +9,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { createClient } from "@supabase/supabase-js";
-import { IsAvaiable__box } from "../../Home/Components/Selectors/select";
-
+import { Form__wrapper } from ".";
 const AddCard: React.FC = () => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
@@ -18,7 +17,6 @@ const AddCard: React.FC = () => {
   const [tachometer, setTachometer] = useState("");
   const [textcar, setTextcar] = useState("");
   const [img, setImg] = useState("");
-  const [IsAvaiable, setIsAviable] = useState<Boolean>(true || false);
   const [loading, setLoading] = useState(false);
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
@@ -27,15 +25,7 @@ const AddCard: React.FC = () => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const handleAddCard = async () => {
-    if (
-      !name ||
-      !textcar ||
-      !img ||
-      !gearbox ||
-      !tachometer ||
-      number === "" ||
-      IsAvaiable === null
-    ) {
+    if (!name || !textcar || !img || !gearbox || !tachometer || !number) {
       toast.error("Barcha maydonlarni to‘ldiring!");
       return;
     } else if (
@@ -52,7 +42,7 @@ const AddCard: React.FC = () => {
       const { data, error } = await supabase
         .from("car data")
         .insert([{ name, textcar, img, gearbox }]);
-      console.log(data);
+      // console.log(data);
 
       setLoading(false);
 
@@ -68,13 +58,11 @@ const AddCard: React.FC = () => {
       }
     }
   };
+
   return (
     <Box
       sx={{
-        maxWidth: 500,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: "100%",
       }}
     >
       <Paper
@@ -84,86 +72,75 @@ const AddCard: React.FC = () => {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: 20,
           justifyContent: "center",
         }}
       >
         <ToastContainer />
-        <Typography variant="h5" component="h2" gutterBottom align="center">
-          Karta qo‘shish
-        </Typography>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleAddCard();
           }}
         >
-          <TextField
-            label="Mashina nomi"
-            variant="outlined"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Yoqilg'i turi"
-            variant="outlined"
-            multiline
-            fullWidth
-            value={textcar}
-            onChange={(e) => setTextcar(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Bosib o'tiladigan masofa"
-            variant="outlined"
-            multiline
-            fullWidth
-            value={tachometer}
-            onChange={(e) => setTachometer(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Mashinaning uzatma turi"
-            variant="outlined"
-            multiline
-            fullWidth
-            value={gearbox}
-            onChange={(e) => setGearbox(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Form__wrapper>
+            <TextField
+              label="Mashina nomi"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Yoqilg'i turi"
+              variant="outlined"
+              value={textcar}
+              onChange={(e) => setTextcar(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Bosib o'tiladigan masofa"
+              variant="outlined"
+              value={tachometer}
+              onChange={(e) => setTachometer(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Mashinaning uzatma turi"
+              variant="outlined"
+              value={gearbox}
+              onChange={(e) => setGearbox(e.target.value)}
+              sx={{ mb: 2 }}
+            />
 
-          <TextField
-            label="Mashina rasmi"
-            variant="outlined"
-            fullWidth
-            value={img}
-            onChange={(e) => setImg(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="O'rindiqlar soni"
-            variant="outlined"
-            fullWidth
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={loading}
-            sx={{ height: 50 }}
-          >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Qo‘shish"
-            )}
-          </Button>
+            <TextField
+              label="Mashina rasmi"
+              variant="outlined"
+              value={img}
+              onChange={(e) => setImg(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="O'rindiqlar soni"
+              variant="outlined"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              sx={{ height: 50 }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Qo‘shish"
+              )}
+            </Button>
+          </Form__wrapper>
         </form>
       </Paper>
     </Box>

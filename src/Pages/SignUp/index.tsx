@@ -2,12 +2,11 @@ import { Box, Container } from "@mui/system";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { InputBox, SignInWrapper } from "./SignUp";
-import { Button, Link, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { CreateAcc } from "../LogIn/LogIn";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { ROUTE_PATHS } from "../../routes/paths";
-
 type Props = {};
 
 function SignUp({}: Props) {
@@ -48,13 +47,11 @@ function SignUp({}: Props) {
     const notifyError = (msg: string) => toast.error(msg);
     const notifySuccess = (msg: string) => toast.success(msg);
 
-    // Inputlar bo'shligini tekshirish
     if (!name.trim() || !email.trim() || !password.trim() || !number.trim()) {
       notifyError("Iltimos, barcha maydonlarni to'ldiring!");
       return;
     }
 
-    // Email duplikatini tekshirish
     try {
       const { data: existingUsers, error: fetchError } = await supabase
         .from("Users")
@@ -72,8 +69,7 @@ function SignUp({}: Props) {
         return;
       }
 
-      // Foydalanuvchini qo'shish
-      const { data: newUser, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from("Users")
         .insert([{ email, name, password, number }]);
 
@@ -87,7 +83,6 @@ function SignUp({}: Props) {
       FetchData();
       navigate(ROUTE_PATHS.HOME);
 
-      // Inputlarni tozalash
       setEmail("");
       setName("");
       setPassword("");
@@ -162,20 +157,28 @@ function SignUp({}: Props) {
               background: "#FFFFFF",
             }}
           />
-          Already Have An Account?
-          <Link
+          <Button
+            variant="contained"
             sx={{
-              cursor: "pointer",
+              marginTop: "20px",
+              padding: "15px 25px",
+              borderRadius: "23px",
+              marginBottom: "20px",
             }}
+            onClick={handleSubmit}
           >
-            Log in
-          </Link>
-        </InputBox>
-        <CreateAcc>
-          <Button variant="contained" onClick={handleSubmit}>
             Sign Up
           </Button>
-        </CreateAcc>
+          <Typography
+            variant="subtitle1"
+            textAlign={"center"}
+            margin={"20px 0 0 0"}
+          >
+            Already Have An Account?
+            <a href={ROUTE_PATHS.LOG_IN}>Log in</a>
+          </Typography>
+        </InputBox>
+        <CreateAcc></CreateAcc>
         <ToastContainer />
       </SignInWrapper>
     </Container>

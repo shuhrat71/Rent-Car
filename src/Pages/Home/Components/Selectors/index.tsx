@@ -31,17 +31,16 @@ interface Cars {
   isAvailable: boolean;
 }
 interface RentedCar {
-  carId: any;
+  carId: number;
   pickUpDate: string;
   dropOffDate: string;
   pickup_location: string;
 }
 const Filter: React.FC = () => {
-  // const [search, setSearch] = useState<string>("");
   const [getData, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [rentedCars, setRentedCars] = useState<RentedCar[]>([]);
-  const [ids, setId] = useState<number[]>([]); // Rented car IDs
+  const [ids, setId] = useState<number[]>([]);
   const [carsInfo, setCarsInfo] = useState<Cars[]>([]);
   const navigate = useNavigate();
 
@@ -76,7 +75,7 @@ const Filter: React.FC = () => {
       const { data: rented, error: rentedError } = await supabase
         .from("rentedLists")
         .select("*");
-      console.log(rented);
+      // console.log(rented);
       setCarsInfo(rented || []);
 
       if (rentedError) throw rentedError;
@@ -229,6 +228,7 @@ const Filter: React.FC = () => {
                         gap: "10px",
                         flexDirection: "column",
                         justifyContent: "space-between",
+                        marginBottom: "20px",
                       }}
                     >
                       <Typography
@@ -243,11 +243,9 @@ const Filter: React.FC = () => {
                         }}
                       >
                         Olib ketilgan sanasi:{" "}
-                        {
-                          rentedCars.find(
-                            (rentedItem) => rentedItem.carId === item.id
-                          )?.pickUpDate
-                        }
+                        {rentedCars
+                          .find((rentedItem) => rentedItem.carId === item.id)
+                          ?.pickUpDate.replace("T", " ")}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -261,11 +259,9 @@ const Filter: React.FC = () => {
                         }}
                       >
                         Qaytarish sanasi:{" "}
-                        {
-                          rentedCars.find(
-                            (rentedItem) => rentedItem.carId === item.id
-                          )?.dropOffDate
-                        }
+                        {rentedCars
+                          .find((rentedItem) => rentedItem.carId === item.id)
+                          ?.dropOffDate.replace("T", " ")}
                       </Typography>
                     </Box>
                   ) : (

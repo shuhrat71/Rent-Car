@@ -36,29 +36,37 @@ const CardDetailARX: React.FC = () => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  useEffect(() => {
-    const fetchDataById = async (id: any) => {
-      try {
-        const { data, error } = await supabase
-          .from("car data")
-          .select("*")
-          .eq("id", id)
-          .single();
+  const fetchDataById = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("rentedLists")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-        if (error) {
-          console.error("Error fetching data by ID:", error.message);
-          return null;
-        }
-        setCard(data);
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
-      } catch (err) {
-        console.error("Unexpected error:", err);
+      const response = await supabase
+        .from("archive")
+        .select("*, rentedLists(*)");
+
+      console.log(response.data);
+
+      if (error) {
+        console.error("Error fetching data by ID:", error.message);
+        return null;
       }
-    };
+      setCard(data);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
+
+  useEffect(() => {
     if (id) {
-      fetchDataById(id);
+      // fetchDataById();
+      console.log("sasa");
     }
   }, [id]);
 
@@ -89,7 +97,7 @@ const CardDetailARX: React.FC = () => {
     <Container>
       <Header />
       <h1>Card Detail</h1>
-      <RentedCar_Wrapper>
+      {/* <RentedCar_Wrapper>
         <Box sx={{ maxWidth: 400 }} key={card.id}>
           <CardMedia
             component="img"
@@ -130,7 +138,6 @@ const CardDetailARX: React.FC = () => {
             >
               <CarDetail>
                 <div className="speedometr box">
-                  <img src={speedometr} alt="" />
                   <p>{card.tachometer}</p>
                 </div>
                 <div className="gearbox box">
@@ -152,7 +159,7 @@ const CardDetailARX: React.FC = () => {
         <CarInfo>
           <Typography>jsdbjcv</Typography>
         </CarInfo>
-      </RentedCar_Wrapper>
+      </RentedCar_Wrapper> */}
     </Container>
   );
 };

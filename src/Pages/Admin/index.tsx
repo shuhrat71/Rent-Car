@@ -69,7 +69,12 @@ export default function VerticalTabs() {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
     const { data, error } = await supabase.from("car data").select("*");
-    console.log(data);
+
+    const response = await supabase
+      .from("archive")
+      .select('*, "Users"(*), "car data"(*), "rentedLists"(*)');
+
+    console.log(response.data);
     if (error) {
       console.error("Error fetching data:", error);
     } else {
@@ -103,9 +108,6 @@ export default function VerticalTabs() {
         <Tab label="Foydalanuvchilar" {...a11yProps(0)} />
         <Tab label="Ijaraga olinganlar" {...a11yProps(1)} />
         <Tab label="Mashina qo'shish" {...a11yProps(2)} />
-        {/* <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} /> */}
       </Tabs>
       <TabPanel value={value} index={0}>
         <Container>
@@ -113,82 +115,7 @@ export default function VerticalTabs() {
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Container>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-evenly",
-              gap: "20px",
-            }}
-          >
-            {getData.map((item: any) => (
-              <Box
-                sx={{
-                  maxWidth: 700,
-                  border: "1px solid black",
-                  marginBottom: "70px",
-                  borderRadius: "10px",
-                  transition: "0.3s",
-                  borderImageSlice: 1,
-
-                  "&:hover": {
-                    boxShadow: 3,
-                    transform: "scale(1.1)",
-                  },
-                }}
-                key={item.id}
-              >
-                <CardMedia
-                  component="img"
-                  height="190"
-                  image={item.img}
-                  alt={item.url}
-                  sx={{
-                    borderRadius: "10px",
-                    width: "100%",
-                  }}
-                />
-                <CardContent>
-                  <CarName>
-                    <Typography variant="h1">{item.name}</Typography>
-                    <img src={item.chevrolet_Logo} alt="" />
-                  </CarName>
-                  <Box
-                    sx={{
-                      width: "375px",
-                      height: "100px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      background: "#F6F6F6",
-                      borderRadius: "16px",
-                    }}
-                  >
-                    <CarDetail>
-                      <div className="speedometr box">
-                        <img src={speedometr} alt="" />
-                        <p>{item.tachometer}</p>
-                      </div>
-                      <div className="gearbox box">
-                        <img src={gearbox} alt="" />
-                        <p>{item.gearbox}</p>
-                      </div>
-                      <div className="person box">
-                        <img src={user} alt="" />
-                        <p>{item.number}</p>
-                      </div>
-                      <div className="petrol box">
-                        <img src={gasStation} alt="" />
-                        <p>{item.textcar}</p>
-                      </div>
-                    </CarDetail>
-                  </Box>
-                </CardContent>
-              </Box>
-            ))}
-          </div>
-        </Container>
+        <ArxivPage />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container>

@@ -49,7 +49,6 @@ const CardDetail: React.FC = () => {
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
   const navigate = useNavigate();
-  const [location, setLocation] = useState(defaultLocation);
   const steps = [
     "Pick-up Location",
     "Pick-up Date",
@@ -90,21 +89,36 @@ const CardDetail: React.FC = () => {
   }, [id]);
   const insertCarData = async () => {
     try {
-      const { data, error } = await supabase.from("rentedLists").insert([
+      const { data, error } = await supabase
+        .from("rentedLists")
+        .insert([
+          {
+            carId: id,
+            pickUpDate,
+            dropOffDate,
+            pickup_location: pickupLocation,
+            drop_off_location: dropOffLocation,
+          },
+        ])
+        .select();
+
+      if (error) throw error;
+
+      const response = await supabase.from("archive").insert([
         {
+          userId: id,
+          rentedId: data?.[0]?.id,
           carId: id,
-          pickUpDate,
-          dropOffDate,
-          pickup_location: pickupLocation,
-          drop_off_location: dropOffLocation,
         },
       ]);
-      console.log("data", data);
+
+      // console.log("data", data, response);
 
       if (error) throw error;
 
       // Muvaffaqiyatli bo'lsa, Home sahifasiga qaytadi
       navigate(ROUTE_PATHS.HOME);
+      toast.success("Rasmiylashtirildi");
     } catch (error) {
       console.error("Error submitting rent data:", error);
     } finally {
@@ -195,7 +209,7 @@ const CardDetail: React.FC = () => {
               {activeStep === 1 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
-                    type="date"
+                    type="datetime-local"
                     value={pickUpDate}
                     onChange={(e) => setPickupDate(e.target.value)}
                     fullWidth
@@ -221,7 +235,7 @@ const CardDetail: React.FC = () => {
               {activeStep === 3 && (
                 <Box sx={{ mt: 2 }}>
                   <TextField
-                    type="date"
+                    type="datetime-local"
                     value={dropOffDate}
                     onChange={(e) => setDropOffDate(e.target.value)}
                     fullWidth
