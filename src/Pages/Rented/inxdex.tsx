@@ -90,7 +90,7 @@ const CardDetail: React.FC = () => {
   const insertCarData = async () => {
     try {
       const { data, error } = await supabase
-        .from("rentedLists")
+        .from("rented_lists")
         .insert([
           {
             carId: id,

@@ -73,7 +73,7 @@ const Filter: React.FC = () => {
       setData(cars || []);
 
       const { data: rented, error: rentedError } = await supabase
-        .from("rentedLists")
+        .from("rentedlists")
         .select("*");
       // console.log(rented);
       setCarsInfo(rented || []);
@@ -95,7 +95,7 @@ const Filter: React.FC = () => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
     try {
-      const { data, error } = await supabase.from("rentedLists").select("*");
+      const { data, error } = await supabase.from("rentedlists").select("*");
 
       if (error) throw error;
 

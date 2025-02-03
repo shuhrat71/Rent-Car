@@ -82,7 +82,7 @@ export default function VerticalTabs() {
 
     const response = await supabase
       .from("archive")
-      .select('*, "Users"(*), "car data"(*), "rentedLists"(*)');
+      .select('*, "Users"(*), "car data"(*), "rentedlists"(*)');
 
     console.log(response.data);
     if (error) {
@@ -99,7 +99,8 @@ export default function VerticalTabs() {
         carId: item["car data"]?.id,
         carName: item["car data"]?.name,
         carImage: item["car data"]?.img,
-        rentedId: item.rentedLists?.id,
+        rentedId: item["rentedlists"]?.pickUpDate,
+        picOffDate: item["rentedlists"]?.pickOffDate,
       })) || [];
     console.log(formattedData);
 
@@ -181,7 +182,9 @@ export default function VerticalTabs() {
                       style={{ borderRadius: "5px" }}
                     />
                   </TableCell>
-                  <TableCell>{item.rentedId}</TableCell>
+                  <TableCell>
+                    {item.rentedId} {item.pickOffDate}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
