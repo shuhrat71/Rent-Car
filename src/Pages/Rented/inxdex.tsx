@@ -16,7 +16,7 @@ import { createClient } from "@supabase/supabase-js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ROUTE_PATHS } from "routes/paths";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import axios from "axios";
 interface Cars {
   id: number;
   name: string;
@@ -28,16 +28,6 @@ interface Cars {
   chevrolet_Logo: string;
 }
 
-const containerStyle = {
-  width: "100%",
-  height: "400px",
-};
-
-const defaultLocation = {
-  lat: 40.7128, // O'zingiz belgilash kerak bo'lgan default latitude
-  lng: -74.006, // O'zingiz belgilash kerak bo'lgan default longitude
-};
-
 const CardDetail: React.FC = () => {
   const { id } = useParams();
 
@@ -48,19 +38,21 @@ const CardDetail: React.FC = () => {
   const [pickUpDate, setPickupDate] = useState("");
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otp, setOtp] = useState("");
+  const [isExpired, setIsExpired] = useState(false);
+
   const navigate = useNavigate();
-  const steps = [
-    "Pick-up Location",
-    "Pick-up Date",
-    "Drop-off Location",
-    "Drop-off Date",
-    "Product",
-  ];
+  const steps = ["Pick-up Location", "Pick-up Date"];
 
   const supabaseUrl = "https://wdybqcunwsmveabxiekf.supabase.co";
   const supabaseKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkeWJxY3Vud3NtdmVhYnhpZWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMzODkyNzYsImV4cCI6MjA0ODk2NTI3Nn0.Fyo48A9AP7-VcERAFEvq2TdZF2Ug2Kr1FwDAgpnp90o";
   const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const generateOtp = () => {
+    return Math.floor(10000 + Math.random() * 90000).toString();
+  };
 
   useEffect(() => {
     const fetchDataById = async (id: any) => {
@@ -89,40 +81,52 @@ const CardDetail: React.FC = () => {
   }, [id]);
   const insertCarData = async () => {
     try {
-      const { data, error } = await supabase
-        .from("rented_lists")
-        .insert([
-          {
-            carId: id,
-            pickUpDate,
-            dropOffDate,
-            pickup_location: pickupLocation,
-            drop_off_location: dropOffLocation,
-          },
-        ])
-        .select();
+      const newOtp = generateOtp();
+      setGeneratedOtp(newOtp); // Kodni saqlash
+      sendOtpMessage(newOtp); // Botga yuborish
 
-      if (error) throw error;
-
-      const response = await supabase.from("archive").insert([
-        {
-          userId: id,
-          rentedId: data?.[0]?.id,
-          carId: id,
-        },
-      ]);
-
-      // console.log("data", data, response);
-
-      if (error) throw error;
-
-      // Muvaffaqiyatli bo'lsa, Home sahifasiga qaytadi
-      navigate(ROUTE_PATHS.HOME);
-      toast.success("Rasmiylashtirildi");
+      toast.success("Tasdiqlash kodi Telegram botga yuborildi!");
     } catch (error) {
       console.error("Error submitting rent data:", error);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  // Foydalanuvchi kodni kiritib tasdiqlaydi
+  const verifyOtp = async () => {
+    if (otp === generatedOtp) {
+      try {
+        // Ma'lumotni bazaga kiritish
+        const { data, error } = await supabase
+          .from("rentedlists")
+          .insert([
+            {
+              carId: id,
+              pickUpDate,
+              dropOffDate,
+              pickup_location: pickupLocation,
+              drop_off_location: dropOffLocation,
+            },
+          ])
+          .select("*");
+
+        if (error) throw error;
+
+        // Archive-ga yozish
+        await supabase.from("archive").insert([
+          {
+            userId: id,
+            rentedId: data?.[0]?.id,
+            carId: id,
+          },
+        ]);
+
+        toast.success("Ijara muvaffaqiyatli rasmiylashtirildi!");
+        navigate(ROUTE_PATHS.HOME);
+      } catch (error) {
+        console.error("Error submitting rent data:", error);
+      }
+    } else {
+      toast.error("Noto‘g‘ri tasdiqlash kodi! Qaytadan urinib ko‘ring.");
     }
   };
   if (!id || isNaN(Number(id))) {
@@ -131,6 +135,7 @@ const CardDetail: React.FC = () => {
   if (!card) {
     return <p></p>;
   }
+
   function CircularIndeterminate() {
     return (
       <Box
@@ -148,27 +153,33 @@ const CardDetail: React.FC = () => {
   if (loading) {
     return CircularIndeterminate();
   }
+  const sendMessage = async (message: string) => {
+    const botToken = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
+    const chatId = "6287309235"; // Foydalanuvchining chat ID si
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    try {
+      await axios.post(url, {
+        chat_id: chatId,
+        text: message,
+      });
+      console.log("Xabar yuborildi!");
+    } catch (error) {
+      console.error("Xatolik:", error);
+    }
+  };
 
+  if (!id || isNaN(Number(id))) {
+    return <p>Error: Invalid or missing ID</p>;
+  }
+  if (!card) {
+    return <p>Loading...</p>;
+  }
   const handleNext = () => {
-    if (activeStep === 0 && !pickupLocation) {
-      toast.error("Please enter pick-up location");
+    if (!pickupLocation || !pickUpDate || !dropOffLocation || !dropOffDate) {
+      toast.error("Iltimos, barcha maydonlarni to'ldiring!");
       return;
     }
-    if (activeStep === 1 && !pickUpDate) {
-      toast.error("Please enter pick-up date");
-      return;
-    }
-    if (activeStep === 2 && !dropOffLocation) {
-      toast.error("Please enter drop-off location");
-      return;
-    }
-    if (activeStep === 3 && !dropOffDate) {
-      toast.error("Please enter drop-off date");
-      return;
-    }
-    if (activeStep < steps.length) {
-      setActiveStep((prevStep) => prevStep + 1);
-    }
+    setActiveStep(1);
   };
 
   const handleBack = () => {
@@ -177,6 +188,22 @@ const CardDetail: React.FC = () => {
     }
   };
 
+  const sendOtpMessage = async (code: string) => {
+    const botToken = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
+    const chatId = "6287309235";
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    try {
+      await axios.post(url, {
+        chat_id: chatId,
+        text: `Tasdiqlash kodi: ${code}`,
+      });
+      console.log(code);
+
+      toast.success("Tasdiqlash kodi yuborildi!");
+    } catch (error) {
+      console.error("Xatolik:", error);
+    }
+  };
   return (
     <Container maxWidth="xl">
       <Header />
@@ -203,111 +230,116 @@ const CardDetail: React.FC = () => {
                     variant="outlined"
                     required
                   />
+                  <Box sx={{ mt: 2 }}>
+                    <TextField
+                      value={dropOffLocation}
+                      onChange={(e) => setDropOffLocation(e.target.value)}
+                      label="Drop-off Location"
+                      fullWidth
+                      variant="outlined"
+                      required
+                    />
+                  </Box>
+                  <Box sx={{ mt: 2 }}>
+                    <TextField
+                      type="datetime-local"
+                      value={pickUpDate}
+                      onChange={(e) => setPickupDate(e.target.value)}
+                      fullWidth
+                      variant="outlined"
+                      required
+                    />
+                  </Box>
+                  <Box sx={{ mt: 2 }}>
+                    <TextField
+                      type="datetime-local"
+                      value={dropOffDate}
+                      onChange={(e) => setDropOffDate(e.target.value)}
+                      fullWidth
+                      variant="outlined"
+                      required
+                    />
+                  </Box>
+
+                  <RentedCar_Wrapper>
+                    <Box sx={{ maxWidth: 400 }} key={card.id}>
+                      <CardMedia
+                        component="img"
+                        height="190"
+                        image={card.img}
+                        alt={card.name}
+                      />
+                      <CardContent>
+                        <Typography
+                          sx={{
+                            fontSize: "27px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItem: "center",
+                          }}
+                          variant="h1"
+                        >
+                          {card.name}{" "}
+                          <img
+                            style={{
+                              width: "70px",
+                            }}
+                            src={card.chevrolet_Logo}
+                            alt=""
+                          />
+                        </Typography>
+                        <Box
+                          sx={{
+                            width: "375px",
+                            height: "100px",
+                            display: "flex",
+                            justifyContent: "center",
+                            aligncards: "center",
+                            background: "#F6F6F6",
+                            borderRadius: "16px",
+                            mt: 2,
+                          }}
+                        >
+                          <CarDetail>
+                            <div className="speedometr box">
+                              <img src={speedometr} alt="" />
+                              <p>{card.tachometer}</p>
+                            </div>
+                            <div className="gearbox box">
+                              <img src={gearbox} alt="" />
+                              <p>{card.gearbox}</p>
+                            </div>
+                            <div className="person box">
+                              <img src={user} alt="" />
+                              <p>{card.number}</p>
+                            </div>
+                            <div className="petrol box">
+                              <img src={gasStation} alt="" />
+                              <p>{card.textcar}</p>
+                            </div>
+                          </CarDetail>
+                        </Box>
+                      </CardContent>
+                    </Box>
+                    <ToastContainer />
+                  </RentedCar_Wrapper>
                 </Box>
               )}
 
               {activeStep === 1 && (
-                <Box sx={{ mt: 2 }}>
+                <div>
                   <TextField
-                    type="datetime-local"
-                    value={pickUpDate}
-                    onChange={(e) => setPickupDate(e.target.value)}
-                    fullWidth
-                    variant="outlined"
-                    required
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="Tasdiqlash kodini kiriting"
                   />
-                </Box>
+
+                  <button onClick={verifyOtp} disabled={isExpired}>
+                    Tasdiqlash
+                  </button>
+                </div>
               )}
 
-              {activeStep === 2 && (
-                <Box sx={{ mt: 2 }}>
-                  <TextField
-                    value={dropOffLocation}
-                    onChange={(e) => setDropOffLocation(e.target.value)}
-                    label="Drop-off Location"
-                    fullWidth
-                    variant="outlined"
-                    required
-                  />
-                </Box>
-              )}
-
-              {activeStep === 3 && (
-                <Box sx={{ mt: 2 }}>
-                  <TextField
-                    type="datetime-local"
-                    value={dropOffDate}
-                    onChange={(e) => setDropOffDate(e.target.value)}
-                    fullWidth
-                    variant="outlined"
-                    required
-                  />
-                </Box>
-              )}
-              {activeStep === 4 && (
-                <RentedCar_Wrapper>
-                  <Box sx={{ maxWidth: 400 }} key={card.id}>
-                    <CardMedia
-                      component="img"
-                      height="190"
-                      image={card.img}
-                      alt={card.name}
-                    />
-                    <CardContent>
-                      <Typography
-                        sx={{
-                          fontSize: "27px",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItem: "center",
-                        }}
-                        variant="h1"
-                      >
-                        {card.name}{" "}
-                        <img
-                          style={{
-                            width: "70px",
-                          }}
-                          src={card.chevrolet_Logo}
-                          alt=""
-                        />
-                      </Typography>
-                      <Box
-                        sx={{
-                          width: "375px",
-                          height: "100px",
-                          display: "flex",
-                          justifyContent: "center",
-                          aligncards: "center",
-                          background: "#F6F6F6",
-                          borderRadius: "16px",
-                          mt: 2,
-                        }}
-                      >
-                        <CarDetail>
-                          <div className="speedometr box">
-                            <img src={speedometr} alt="" />
-                            <p>{card.tachometer}</p>
-                          </div>
-                          <div className="gearbox box">
-                            <img src={gearbox} alt="" />
-                            <p>{card.gearbox}</p>
-                          </div>
-                          <div className="person box">
-                            <img src={user} alt="" />
-                            <p>{card.number}</p>
-                          </div>
-                          <div className="petrol box">
-                            <img src={gasStation} alt="" />
-                            <p>{card.textcar}</p>
-                          </div>
-                        </CarDetail>
-                      </Box>
-                    </CardContent>
-                  </Box>
-                  <ToastContainer />
-                </RentedCar_Wrapper>
-              )}
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
               >
@@ -318,7 +350,7 @@ const CardDetail: React.FC = () => {
                 >
                   Back
                 </Button>
-                {activeStep === steps.length - 1 ? (
+                {activeStep === 1 ? (
                   <Button onClick={insertCarData} variant="contained">
                     Rasmiylashtirish
                   </Button>
