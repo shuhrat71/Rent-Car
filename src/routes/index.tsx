@@ -10,9 +10,7 @@ export interface IRoute {
   path: string;
   component: JSX.Element | JSX.Element[];
 }
-
 const { HOME } = ROUTE_PATHS;
-
 export const PRIVATE_ROUTES: IRoute[] = [
   {
     path: "/",

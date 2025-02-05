@@ -38,10 +38,10 @@ const CardDetail: React.FC = () => {
   const [pickUpDate, setPickupDate] = useState("");
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState("");
   const [otp, setOtp] = useState("");
   const [isExpired, setIsExpired] = useState(false);
-
+  const [otpInput, setOtpInput] = useState<string>(""); // Inputdagi OTP qiymati
+  const [generatedOtp, setGeneratedOtp] = useState<string>(""); // Yaratilgan OTP
   const navigate = useNavigate();
   const steps = ["Pick-up Location", "Pick-up Date"];
 
@@ -82,6 +82,7 @@ const CardDetail: React.FC = () => {
   const insertCarData = async () => {
     try {
       const newOtp = generateOtp();
+
       setGeneratedOtp(newOtp); // Kodni saqlash
       sendOtpMessage(newOtp); // Botga yuborish
 
@@ -93,40 +94,36 @@ const CardDetail: React.FC = () => {
 
   // Foydalanuvchi kodni kiritib tasdiqlaydi
   const verifyOtp = async () => {
-    if (otp === generatedOtp) {
-      try {
-        // Ma'lumotni bazaga kiritish
-        const { data, error } = await supabase
-          .from("rentedlists")
-          .insert([
-            {
-              carId: id,
-              pickUpDate,
-              dropOffDate,
-              pickup_location: pickupLocation,
-              drop_off_location: dropOffLocation,
-            },
-          ])
-          .select("*");
-
-        if (error) throw error;
-
-        // Archive-ga yozish
-        await supabase.from("archive").insert([
+    try {
+      // Ma'lumotni bazaga kiritish
+      const { data, error } = await supabase
+        .from("rentedlists")
+        .insert([
           {
-            userId: id,
-            rentedId: data?.[0]?.id,
             carId: id,
+            pickUpDate,
+            dropOffDate,
+            pickup_location: pickupLocation,
+            drop_off_location: dropOffLocation,
           },
-        ]);
+        ])
+        .select("*");
 
-        toast.success("Ijara muvaffaqiyatli rasmiylashtirildi!");
-        navigate(ROUTE_PATHS.HOME);
-      } catch (error) {
-        console.error("Error submitting rent data:", error);
-      }
-    } else {
-      toast.error("Noto‘g‘ri tasdiqlash kodi! Qaytadan urinib ko‘ring.");
+      if (error) throw error;
+
+      // Archive-ga yozish
+      await supabase.from("archive").insert([
+        {
+          userId: id,
+          rentedId: data?.[0]?.id,
+          carId: id,
+        },
+      ]);
+
+      toast.success("Ijara muvaffaqiyatli rasmiylashtirildi!");
+      navigate(ROUTE_PATHS.HOME);
+    } catch (error) {
+      console.error("Error submitting rent data:", error);
     }
   };
   if (!id || isNaN(Number(id))) {
@@ -153,20 +150,6 @@ const CardDetail: React.FC = () => {
   if (loading) {
     return CircularIndeterminate();
   }
-  const sendMessage = async (message: string) => {
-    const botToken = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
-    const chatId = "6287309235"; // Foydalanuvchining chat ID si
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-    try {
-      await axios.post(url, {
-        chat_id: chatId,
-        text: message,
-      });
-      console.log("Xabar yuborildi!");
-    } catch (error) {
-      console.error("Xatolik:", error);
-    }
-  };
 
   if (!id || isNaN(Number(id))) {
     return <p>Error: Invalid or missing ID</p>;
@@ -192,16 +175,42 @@ const CardDetail: React.FC = () => {
     const botToken = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
     const chatId = "6287309235";
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-    try {
-      await axios.post(url, {
-        chat_id: chatId,
-        text: `Tasdiqlash kodi: ${code}`,
-      });
-      console.log(code);
 
+    console.log("Telegram API-ga so‘rov yuborilmoqda...");
+
+    try {
+      const response = await axios.post(url, {
+        chat_id: chatId,
+        text: `Tasdiqlash kodi: *${code}*`,
+        parse_mode: "Markdown",
+      });
+
+      console.log("Bot javobi:", response.data);
       toast.success("Tasdiqlash kodi yuborildi!");
+
+      setTimeout(() => {
+        toast.error("Vaqt tugadi, qayta kod olish uchun bosing.");
+      }, 100000);
     } catch (error) {
-      console.error("Xatolik:", error);
+      console.error("Xatolik yuz berdi:", error);
+      toast.error(
+        "Xatolik yuz berdi, iltimos, tekshirib qayta urinib ko‘ring."
+      );
+    }
+  };
+  const handleConfirmOtp = () => {
+    console.log(otpInput, generatedOtp);
+
+    if (otpInput === generatedOtp) {
+      //   // Agar kiritilgan kod to'g'ri bo'lsa
+      toast.success(
+        "Tasdiqlash kodi to‘g‘ri! Ijara muvaffaqiyatli rasmiylashtirildi!"
+      );
+      verifyOtp(); // Kodni tasdiqlash
+      navigate(ROUTE_PATHS.HOME); // Home page-ga o'tish
+    } else {
+      //   // Agar kod noto‘g‘ri bo‘lsa
+      toast.error("Noto‘g‘ri tasdiqlash kodi! Qaytadan urinib ko‘ring.");
     }
   };
   return (
@@ -219,148 +228,146 @@ const CardDetail: React.FC = () => {
               ))}
             </Stepper>
 
-            <form>
-              {activeStep === 0 && (
+            {activeStep === 0 && (
+              <Box sx={{ mt: 2 }}>
+                <TextField
+                  value={pickupLocation}
+                  onChange={(e) => setPickupLocation(e.target.value)}
+                  label="Pick-up Location"
+                  fullWidth
+                  variant="outlined"
+                  required
+                />
                 <Box sx={{ mt: 2 }}>
                   <TextField
-                    value={pickupLocation}
-                    onChange={(e) => setPickupLocation(e.target.value)}
-                    label="Pick-up Location"
+                    value={dropOffLocation}
+                    onChange={(e) => setDropOffLocation(e.target.value)}
+                    label="Drop-off Location"
                     fullWidth
                     variant="outlined"
                     required
                   />
-                  <Box sx={{ mt: 2 }}>
-                    <TextField
-                      value={dropOffLocation}
-                      onChange={(e) => setDropOffLocation(e.target.value)}
-                      label="Drop-off Location"
-                      fullWidth
-                      variant="outlined"
-                      required
-                    />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <TextField
-                      type="datetime-local"
-                      value={pickUpDate}
-                      onChange={(e) => setPickupDate(e.target.value)}
-                      fullWidth
-                      variant="outlined"
-                      required
-                    />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <TextField
-                      type="datetime-local"
-                      value={dropOffDate}
-                      onChange={(e) => setDropOffDate(e.target.value)}
-                      fullWidth
-                      variant="outlined"
-                      required
-                    />
-                  </Box>
-
-                  <RentedCar_Wrapper>
-                    <Box sx={{ maxWidth: 400 }} key={card.id}>
-                      <CardMedia
-                        component="img"
-                        height="190"
-                        image={card.img}
-                        alt={card.name}
-                      />
-                      <CardContent>
-                        <Typography
-                          sx={{
-                            fontSize: "27px",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItem: "center",
-                          }}
-                          variant="h1"
-                        >
-                          {card.name}{" "}
-                          <img
-                            style={{
-                              width: "70px",
-                            }}
-                            src={card.chevrolet_Logo}
-                            alt=""
-                          />
-                        </Typography>
-                        <Box
-                          sx={{
-                            width: "375px",
-                            height: "100px",
-                            display: "flex",
-                            justifyContent: "center",
-                            aligncards: "center",
-                            background: "#F6F6F6",
-                            borderRadius: "16px",
-                            mt: 2,
-                          }}
-                        >
-                          <CarDetail>
-                            <div className="speedometr box">
-                              <img src={speedometr} alt="" />
-                              <p>{card.tachometer}</p>
-                            </div>
-                            <div className="gearbox box">
-                              <img src={gearbox} alt="" />
-                              <p>{card.gearbox}</p>
-                            </div>
-                            <div className="person box">
-                              <img src={user} alt="" />
-                              <p>{card.number}</p>
-                            </div>
-                            <div className="petrol box">
-                              <img src={gasStation} alt="" />
-                              <p>{card.textcar}</p>
-                            </div>
-                          </CarDetail>
-                        </Box>
-                      </CardContent>
-                    </Box>
-                    <ToastContainer />
-                  </RentedCar_Wrapper>
                 </Box>
-              )}
-
-              {activeStep === 1 && (
-                <div>
+                <Box sx={{ mt: 2 }}>
                   <TextField
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Tasdiqlash kodini kiriting"
+                    type="datetime-local"
+                    value={pickUpDate}
+                    onChange={(e) => setPickupDate(e.target.value)}
+                    fullWidth
+                    variant="outlined"
+                    required
                   />
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <TextField
+                    type="datetime-local"
+                    value={dropOffDate}
+                    onChange={(e) => setDropOffDate(e.target.value)}
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </Box>
 
-                  <button onClick={verifyOtp} disabled={isExpired}>
-                    Tasdiqlash
-                  </button>
-                </div>
-              )}
-
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
-              >
-                <Button
-                  onClick={handleBack}
-                  disabled={activeStep === 0}
-                  variant="outlined"
-                >
-                  Back
-                </Button>
-                {activeStep === 1 ? (
-                  <Button onClick={insertCarData} variant="contained">
-                    Rasmiylashtirish
-                  </Button>
-                ) : (
-                  <Button onClick={handleNext} variant="contained">
-                    Next
-                  </Button>
-                )}
+                <RentedCar_Wrapper>
+                  <Box sx={{ maxWidth: 400 }} key={card.id}>
+                    <CardMedia
+                      component="img"
+                      height="190"
+                      image={card.img}
+                      alt={card.name}
+                    />
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: "27px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItem: "center",
+                        }}
+                        variant="h1"
+                      >
+                        {card.name}{" "}
+                        <img
+                          style={{
+                            width: "70px",
+                          }}
+                          src={card.chevrolet_Logo}
+                          alt=""
+                        />
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: "375px",
+                          height: "100px",
+                          display: "flex",
+                          justifyContent: "center",
+                          aligncards: "center",
+                          background: "#F6F6F6",
+                          borderRadius: "16px",
+                          mt: 2,
+                        }}
+                      >
+                        <CarDetail>
+                          <div className="speedometr box">
+                            <img src={speedometr} alt="" />
+                            <p>{card.tachometer}</p>
+                          </div>
+                          <div className="gearbox box">
+                            <img src={gearbox} alt="" />
+                            <p>{card.gearbox}</p>
+                          </div>
+                          <div className="person box">
+                            <img src={user} alt="" />
+                            <p>{card.number}</p>
+                          </div>
+                          <div className="petrol box">
+                            <img src={gasStation} alt="" />
+                            <p>{card.textcar}</p>
+                          </div>
+                        </CarDetail>
+                      </Box>
+                    </CardContent>
+                  </Box>
+                  <ToastContainer />
+                </RentedCar_Wrapper>
               </Box>
-            </form>
+            )}
+
+            {activeStep === 1 && (
+              <div>
+                <TextField
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value)}
+                  placeholder="Tasdiqlash kodini kiriting"
+                />
+
+                <button onClick={handleConfirmOtp} disabled={isExpired}>
+                  Tasdiqlash
+                </button>
+              </div>
+            )}
+
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+            >
+              <Button
+                onClick={handleBack}
+                disabled={activeStep === 0}
+                variant="outlined"
+              >
+                Back
+              </Button>
+              {activeStep === 1 ? (
+                <Button onClick={insertCarData} variant="contained">
+                  Rasmiylashtirish
+                </Button>
+              ) : (
+                <Button onClick={handleNext} variant="contained">
+                  Next
+                </Button>
+              )}
+            </Box>
           </Box>
         </Stepper_Wrapper>
       </RentedContend__wrapper>
