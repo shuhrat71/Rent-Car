@@ -1,22 +1,24 @@
-import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { ROUTE_PATHS } from "routes/paths";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { createClient } from "@supabase/supabase-js";
 import { Button, Stepper, Step, StepLabel, TextField } from "@mui/material";
 import { Typography, Box, Container } from "@mui/material";
-import CardMedia from "@mui/material/CardMedia";
 import { CarDetail } from "../Home/Components/Card/card";
+import { RentedCar_Wrapper, RentedContend__wrapper, Stepper_Wrapper } from ".";
+import CircularProgress from "@mui/material/CircularProgress";
+import Header from "../Header";
+import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import speedometr from "../Home/Components/Selectors/img/speedometer.svg";
 import gearbox from "../Home/Components/Selectors/img/gearbox.svg";
 import user from "../Home/Components/Selectors/img/user.svg";
+import TelegramIcon from "@mui/icons-material/Telegram";
 import gasStation from "../Home/Components/Selectors/img/gasStation.svg";
-import CircularProgress from "@mui/material/CircularProgress";
-import { RentedCar_Wrapper, RentedContend__wrapper, Stepper_Wrapper } from ".";
-import Header from "../Header";
-import { createClient } from "@supabase/supabase-js";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { ROUTE_PATHS } from "routes/paths";
-import axios from "axios";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
 interface Cars {
   id: number;
   name: string;
@@ -354,17 +356,36 @@ Tasdiqlash kodini kiriting va buyurtmani yakunlang!`;
             )}
 
             {activeStep === 1 && (
-              <div>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: "30px",
+                  gap: "20px",
+                }}
+              >
                 <TextField
                   value={otpInput}
                   onChange={(e) => setOtpInput(e.target.value)}
                   placeholder="Tasdiqlash kodini kiriting"
                 />
 
-                <button onClick={handleConfirmOtp} disabled={isExpired}>
-                  Tasdiqlash
-                </button>
-              </div>
+                <Button
+                  onClick={handleConfirmOtp}
+                  disabled={isExpired}
+                  variant="contained"
+                  sx={{
+                    padding: "15px 0",
+                    display: "flex",
+                    gap: "20px",
+                    alignItems: "center",
+                    fontSize: "16px",
+                  }}
+                >
+                  <NoCrashIcon /> Tasdiqlash
+                </Button>
+              </Box>
             )}
 
             <Box
@@ -378,8 +399,17 @@ Tasdiqlash kodini kiriting va buyurtmani yakunlang!`;
                 Back
               </Button>
               {activeStep === 1 ? (
-                <Button onClick={insertCarData} variant="contained">
-                  Rasmiylashtirish
+                <Button
+                  onClick={insertCarData}
+                  variant="contained"
+                  sx={{
+                    display: "flex",
+                    gap: "10px",
+                    justifyContent: "space-between",
+                    padding: "15px 20px",
+                  }}
+                >
+                  <TelegramIcon /> Kodni yuborish
                 </Button>
               ) : (
                 <Button onClick={handleNext} variant="contained">
