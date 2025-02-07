@@ -48,7 +48,6 @@ export default function MultiActionAreaCard() {
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase.from("car data").select("*");
-      // console.log(data);
       if (error) {
         console.error("Error fetching data:", error);
       } else {

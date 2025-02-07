@@ -38,10 +38,9 @@ const CardDetail: React.FC = () => {
   const [pickUpDate, setPickupDate] = useState("");
   const [dropOffLocation, setDropOffLocation] = useState("");
   const [dropOffDate, setDropOffDate] = useState("");
-  const [otp, setOtp] = useState("");
-  const [isExpired, setIsExpired] = useState(false);
-  const [otpInput, setOtpInput] = useState<string>(""); // Inputdagi OTP qiymati
-  const [generatedOtp, setGeneratedOtp] = useState<string>(""); // Yaratilgan OTP
+  const [isExpired] = useState(false);
+  const [otpInput, setOtpInput] = useState<string>("");
+  const [generatedOtp, setGeneratedOtp] = useState<string>("");
   const navigate = useNavigate();
   const steps = ["Pick-up Location", "Pick-up Date"];
 
@@ -82,9 +81,9 @@ const CardDetail: React.FC = () => {
   const insertCarData = async () => {
     try {
       const newOtp = generateOtp();
+      setGeneratedOtp(newOtp);
 
-      setGeneratedOtp(newOtp); // Kodni saqlash
-      sendOtpMessage(newOtp); // Botga yuborish
+      await sendOtpMessage(newOtp, card);
 
       toast.success("Tasdiqlash kodi Telegram botga yuborildi!");
     } catch (error) {
@@ -92,10 +91,8 @@ const CardDetail: React.FC = () => {
     }
   };
 
-  // Foydalanuvchi kodni kiritib tasdiqlaydi
   const verifyOtp = async () => {
     try {
-      // Ma'lumotni bazaga kiritish
       const { data, error } = await supabase
         .from("rentedlists")
         .insert([
@@ -111,7 +108,6 @@ const CardDetail: React.FC = () => {
 
       if (error) throw error;
 
-      // Archive-ga yozish
       await supabase.from("archive").insert([
         {
           userId: id,
@@ -121,11 +117,14 @@ const CardDetail: React.FC = () => {
       ]);
 
       toast.success("Ijara muvaffaqiyatli rasmiylashtirildi!");
-      navigate(ROUTE_PATHS.HOME);
+
+      return data?.[0];
     } catch (error) {
       console.error("Error submitting rent data:", error);
+      return null;
     }
   };
+
   if (!id || isNaN(Number(id))) {
     return <p>Error: Invalid or missing ID</p>;
   }
@@ -171,23 +170,44 @@ const CardDetail: React.FC = () => {
     }
   };
 
-  const sendOtpMessage = async (code: string) => {
-    const botToken = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
-    const chatId = "6287309235";
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  const sendOtpMessage = async (code: string, carData: any) => {
+    const BOT_TOKEN = "8198171947:AAE5LeyTu0v9KYGFlJaG6drUV0RpyeGCfsI";
+    const CHAT_ID = "6287309235";
+
+    if (!carData) {
+      toast.error("Buyurtma ma’lumotlari topilmadi.");
+      return;
+    }
+
+    const { name, gearbox, textcar, img } = carData;
+
+    const message = `
+🚗 *Yangi Buyurtma* 🚗
+✅ *Tasdiqlash kodi:* *${code}*
+🚗 *Buyurtma qilingan mashina ${img}*
+📌 *Mashina:* ${name}
+🎨 *Uzatmalar qutisi:* ${gearbox}
+💰 *Narxi:* ${textcar} so‘m
+📅 *Pickup:* ${pickUpDate} - ${pickupLocation}
+📅 *Dropoff:* ${dropOffDate} - ${dropOffLocation}
+
+Tasdiqlash kodini kiriting va buyurtmani yakunlang!`;
+
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
     console.log("Telegram API-ga so‘rov yuborilmoqda...");
 
     try {
       const response = await axios.post(url, {
-        chat_id: chatId,
-        text: `Tasdiqlash kodi: *${code}*`,
+        chat_id: CHAT_ID,
+        text: message,
         parse_mode: "Markdown",
       });
 
       console.log("Bot javobi:", response.data);
-      toast.success("Tasdiqlash kodi yuborildi!");
+      toast.success("Tasdiqlash kodi va mashina ma'lumotlari yuborildi!");
 
+      // 100 soniyadan so‘ng eslatma chiqarish
       setTimeout(() => {
         toast.error("Vaqt tugadi, qayta kod olish uchun bosing.");
       }, 100000);
@@ -198,18 +218,17 @@ const CardDetail: React.FC = () => {
       );
     }
   };
-  const handleConfirmOtp = () => {
+
+  const handleConfirmOtp = async () => {
     console.log(otpInput, generatedOtp);
 
     if (otpInput === generatedOtp) {
-      //   // Agar kiritilgan kod to'g'ri bo'lsa
       toast.success(
         "Tasdiqlash kodi to‘g‘ri! Ijara muvaffaqiyatli rasmiylashtirildi!"
       );
-      verifyOtp(); // Kodni tasdiqlash
-      navigate(ROUTE_PATHS.HOME); // Home page-ga o'tish
+      await verifyOtp();
+      navigate(ROUTE_PATHS.HOME);
     } else {
-      //   // Agar kod noto‘g‘ri bo‘lsa
       toast.error("Noto‘g‘ri tasdiqlash kodi! Qaytadan urinib ko‘ring.");
     }
   };
